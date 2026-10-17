@@ -83,7 +83,23 @@ public class PredatorSenseClient : IDisposable
 
             _socket?.Dispose();
             _socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
-            var endpoint = new UnixDomainSocketEndPoint(SocketPath);
+            var socketToUse = SocketPath;
+            if (!File.Exists(socketToUse) && Directory.Exists("/var/run"))
+            {
+                try
+                {
+                    foreach (var f in Directory.GetFiles("/var/run", "*.sock"))
+                    {
+                        if (!f.Contains("docker") && !f.Contains("keyd"))
+                        {
+                            socketToUse = f;
+                            break;
+                        }
+                    }
+                }
+                catch { }
+            }
+            var endpoint = new UnixDomainSocketEndPoint(socketToUse);
 
             await _socket.ConnectAsync(endpoint);
             IsConnected = true;

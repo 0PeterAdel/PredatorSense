@@ -2,6 +2,8 @@
 
 Thank you for your interest in contributing to **PredatorSense for Linux**! Community contributions—whether they are bug fixes, support for new Acer laptop models, feature enhancements, or documentation improvements—are warmly welcomed and deeply appreciated.
 
+To maintain a professional, clean, and reliable codebase, all contributors and maintainers follow the engineering standards defined in the [ShiftCore Team Handbook](https://platform.shiftcore.workers.dev/docs/handbook).
+
 ---
 
 ## 📜 Open Source & Attribution Terms
@@ -11,118 +13,154 @@ PredatorSense for Linux is free open-source software licensed under the **GNU Ge
 > **You are completely free to use, modify, fork, and distribute this software, provided that you clearly and prominently attribute the original author (Peter Adel / 0PeterAdel) and link back to the official repository:**  
 > **https://github.com/0PeterAdel/PredatorSense**
 
-By submitting a Pull Request, you agree that your code will be released under these exact same terms.
+By submitting a Pull Request, you agree that your code will be released under these exact terms.
 
 ---
 
-## 🚀 How to Contribute
+## 📋 Core Git Rules
 
-### 1. Reporting Bugs & Issues
-If you encounter a bug or unexpected behavior:
-1. Search existing [Issues](https://github.com/0PeterAdel/PredatorSense/issues) to ensure it hasn't already been reported.
-2. If not found, open a new issue using our **🐛 Bug Report** template.
-3. Include your laptop model, Linux distribution, kernel version (`uname -r`), and daemon logs (`journalctl -u predatorsense-daemon.service -n 50`).
+We strictly adhere to the [ShiftCore Git Workflow](https://platform.shiftcore.workers.dev/docs/handbook/docs/git/git-workflow):
+1. **Never work directly on `main`** — `main` is protected and always stable.
+2. **Every task must have its own branch** following the format `type/short-task-name`.
+3. **No direct pushes to `main`** — all changes must go through a Pull Request.
+4. **Clean commit messages** following `type(scope): short message`.
+5. **No secret or temporary files** — never commit `.env`, credentials, build caches, or logs.
+6. **PR review & verification** — merge only after review approval and passing CI checks.
 
-### 2. Suggesting New Features
-Have an idea to make PredatorSense even better?
-1. Open a new issue using our **🚀 Feature Request** template.
-2. Describe your idea, its intended use-case, and why it benefits Acer Linux gaming users.
-3. Feel free to include UI sketches or mockups!
-
-### 3. Reporting Laptop Compatibility
-Help us expand our list of verified hardware! If you test PredatorSense on your Acer laptop, open a **💻 Hardware Compatibility Report** and tell us which features work.
-
----
-
-## 🛠️ Local Development Setup
-
-### Prerequisites
-Ensure you have the following build tools installed on your Linux machine:
-- **.NET 9 SDK:** `dotnet-sdk-9.0`
-- **Python:** Python 3.10+
-- **C Compiler & Headers:** `gcc`, `make`, `linux-headers` (for your active kernel)
-
-### Building the Project
-
-#### 1. Graphical User Interface (Avalonia UI / .NET 9)
-```bash
-# Debug Build
-dotnet build gui/PredatorSense.csproj
-
-# Run locally in development
-dotnet run --project gui/PredatorSense.csproj
-
-# Release Build
-dotnet build gui/PredatorSense.csproj -c Release
-```
-
-#### 2. Kernel Driver (`linuwu_sense`)
-```bash
-cd driver
-make clean
-make KVER="$(uname -r)"
-```
-
-#### 3. Daemon Service (Python)
-```bash
-cd daemon
-python3 -m py_compile *.py
+```text
+Branch → Commit → Push → Pull Request → Review → Approval → Merge
 ```
 
 ---
 
-## 📝 Commit Conventions
+## 🌿 Branch Naming Rules
 
-We follow [Conventional Commits](https://www.conventionalcommits.org/) for clear and structured git history:
+Follow the [ShiftCore Branch & Commit Rules](https://platform.shiftcore.workers.dev/docs/handbook/docs/git/branch-and-commit-rules):
 
-- `feat:` A new user-facing feature or enhancement (e.g. `feat(gui): add concentric zoom lighting animation`)
-- `fix:` A bug fix (e.g. `fix(driver): handle missing WMI thermal GUID gracefully`)
-- `docs:` Documentation changes only (e.g. `docs: update installation instructions for Fedora`)
-- `style:` Changes that do not affect the meaning of code (formatting, whitespace, etc.)
-- `refactor:` Code restructuring without adding features or fixing bugs
-- `perf:` Performance improvements
-- `ci:` Changes to CI configuration or build scripts
+Format:
+```text
+type/short-task-name
+```
+
+### Allowed Branch Types:
+- `feat/` — New feature or hardware support (e.g., `feat/triton-fan-curve`, `feat/keyboard-audio-visualizer`)
+- `fix/` — Bug fix (e.g., `fix/daemon-socket-retry`, `fix/readme-typo`)
+- `docs/` — Documentation updates (e.g., `docs/align-handbook-rules`, `docs/setup-guide`)
+- `style/` — Formatting or styling without logic changes (e.g., `style/format-dashboard-xaml`)
+- `refactor/` — Code improvement without behavior change (e.g., `refactor/effects-engine`)
+- `test/` — Adding or improving tests (e.g., `test/socket-client-unit-tests`)
+- `chore/` — Build or maintenance tasks (e.g., `chore/bump-nuget-packages`)
+- `perf/` — Performance optimization (e.g., `perf/dynamic-rgb-cpu-usage`)
+- `ci/` — CI/CD automation changes (e.g., `ci/add-multiarch-build`)
+- `build/` — Build system or dependency updates (e.g., `build/net9-upgrade`)
+- `security/` — Security patches (e.g., `security/sanitize-sysfs-input`)
+
+*Rules: Use lowercase, hyphens between words, keep it short and descriptive. Avoid vague names like `test`, `update`, `final`, or `my-work`.*
 
 ---
 
-## 🔀 Submitting a Pull Request (PR)
+## 💬 Commit Message Format
 
-1. **Fork** the repository on GitHub.
-2. **Clone** your fork locally:
+Commit messages must follow Conventional Commits:
+
+```text
+type(scope): short message
+```
+*(Scope is optional but recommended when affecting a specific module).*
+
+### Allowed Types:
+`feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `build`, `security`, `revert`.
+
+### Common Scopes:
+`gui`, `driver`, `daemon`, `rgb`, `telemetry`, `installer`, `packaging`, `docs`, `ci`, `security`.
+
+### Examples:
+- `feat(gui): add realistic chiclet keyboard visualizer`
+- `fix(daemon): handle missing sysfs thermal node gracefully`
+- `docs(handbook): align git workflow and pr rules with engineering handbook`
+- `perf(rgb): reduce dynamic effect render loop latency to 25ms`
+- `chore(release): prepare v1.0.0 distribution archive`
+
+---
+
+## 🔀 Pull Request Guide
+
+Follow the [ShiftCore Pull Request Guide](https://platform.shiftcore.workers.dev/docs/handbook/docs/git/pull-request-guide):
+
+### Standard Step-by-Step Workflow:
+1. **Sync with latest main:**
    ```bash
-   git clone https://github.com/<your-username>/PredatorSense.git
-   cd PredatorSense
+   git switch main
+   git pull origin main
    ```
-3. **Create a branch** for your work:
+2. **Create your task branch:**
    ```bash
-   git checkout -b feat/my-awesome-feature
+   git switch -c feat/my-new-feature
    ```
-4. **Make your changes** cleanly and test thoroughly on your machine.
-5. **Verify the build**:
+3. **Make focused changes** (only modify files relevant to your task).
+4. **Verify and test locally:**
    ```bash
    dotnet build gui/PredatorSense.csproj -c Release
    ```
-6. **Commit** your changes following conventional commit syntax.
-7. **Push** to your fork:
+5. **Stage and commit:**
    ```bash
-   git push origin feat/my-awesome-feature
+   git add <specific-files>
+   git commit -m "feat(scope): concise description of change"
    ```
-8. **Open a Pull Request** to the `main` branch of `0PeterAdel/PredatorSense`.
-9. Fill out our PR template thoroughly. Maintainers will review your PR and provide constructive feedback!
+6. **Push branch to GitHub:**
+   ```bash
+   git push -u origin feat/my-new-feature
+   ```
+7. **Open a Pull Request:**
+   - Title format: `type: short description` (e.g., `feat: add per-key rgb visualizer`).
+   - Fill out our PR template thoroughly:
+     - **What changed?**
+     - **Why?**
+     - **How to review?**
+     - **Notes / Hardware Tested On**
+8. **Code Review:** Address feedback with additional commits on the same branch.
+9. **Merge:** Once approved and CI checks pass, merge into `main` and delete the task branch.
 
 ---
 
-## 💡 Code & UI Guidelines
+## 🛠️ Local Development & Testing
 
-- **Cyber Dark Glass Theme:** UI additions must respect the Acer Predator cyberpunk aesthetic: dark glass panels (`#080f14`), glowing cyber-teal borders (`#00ff9d` / `#00d4ff`), and crisp typography.
-- **Documentation Integrity:** Preserve all existing architectural comments, docstrings, and author headers.
-- **Safety First:** Driver and ACPI calls interact with laptop motherboard firmware (EC). Always sanitize inputs and prevent potential hardware lockups.
+### Prerequisites
+- **.NET 9 SDK:** `dotnet-sdk-9.0`
+- **Python:** Python 3.10+
+- **Build Tools:** `gcc`, `make`, `linux-headers` (for active kernel)
+
+### Build Commands:
+```bash
+# 1. Build Avalonia GUI (.NET 9)
+dotnet build gui/PredatorSense.csproj -c Release
+
+# 2. Run GUI locally in development
+dotnet run --project gui/PredatorSense.csproj
+
+# 3. Compile Kernel Module
+make -C driver KVER="$(uname -r)"
+
+# 4. Syntax check Python daemon
+python3 -m py_compile daemon/*.py
+```
 
 ---
 
-## 🤝 Community & Support
+## 🏷️ Tag & Release Standards
 
-- **Repository:** [https://github.com/0PeterAdel/PredatorSense](https://github.com/0PeterAdel/PredatorSense)
-- **Discussions:** [https://github.com/0PeterAdel/PredatorSense/discussions](https://github.com/0PeterAdel/PredatorSense/discussions)
+Releases follow [Semantic Versioning](https://semver.org/) (`vMAJOR.MINOR.PATCH`):
+- Tags are created only from `main` after PR merges.
+- Tag format: `vX.Y.Z` (e.g., `v1.0.0`, `v1.1.0`).
+- Every release includes detailed release notes categorized by `Features`, `Bug Fixes`, `Performance`, and pre-compiled distribution archives with SHA-256 checksums.
 
-Thank you for helping make gaming on Linux incredible! 🚀
+---
+
+## 📚 Handbook References
+
+For deep dives into team practices, consult the ShiftCore Engineering Handbook:
+- [Branch and Commit Rules](https://platform.shiftcore.workers.dev/docs/handbook/docs/git/branch-and-commit-rules)
+- [Git Workflow](https://platform.shiftcore.workers.dev/docs/handbook/docs/git/git-workflow)
+- [Pull Request Guide](https://platform.shiftcore.workers.dev/docs/handbook/docs/git/pull-request-guide)
+
+Thank you for building a world-class gaming experience for Linux! 🚀

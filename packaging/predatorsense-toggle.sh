@@ -10,6 +10,8 @@ if [[ -x "$APP_BIN" ]]; then
     BIN="$APP_BIN"
 elif [[ -x "$FALLBACK_BIN" ]]; then
     BIN="$FALLBACK_BIN"
+elif [[ -x "${HOME}/.local/bin/predatorsense" ]]; then
+    BIN="${HOME}/.local/bin/predatorsense"
 elif command -v predatorsense >/dev/null 2>&1; then
     BIN="$(command -v predatorsense)"
 fi

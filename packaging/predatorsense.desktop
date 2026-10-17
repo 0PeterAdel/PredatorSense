@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Predator Sense
+Comment=Acer Predator Helios & Nitro Gaming Control Center
+Exec=/usr/local/bin/predatorsense
+Icon=predatorsense
+Terminal=false
+Type=Application
+Categories=Utility;System;Settings;HardwareSettings;
+Keywords=acer;predator;helios;sense;laptop;fan;keyboard;rgb;nitro;overclock;turbo;
+StartupWMClass=PredatorSense

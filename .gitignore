@@ -1,0 +1,58 @@
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+build/
+
+# .NET / C#
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vscode/
+.idea/
+*.rsuser
+
+# Linux Kernel Driver
+*.o
+*.ko
+*.mod
+*.mod.c
+*.mod.o
+*.order
+*.symvers
+.tmp_versions/
+.*.cmd
+.cache.mk
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+*.spec
+
+# OS / Temporary
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+*~
+*.log
+/tmp/

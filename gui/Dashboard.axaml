@@ -1,0 +1,263 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="PredatorSense.Dashboard"
+             xmlns:material="using:Material.Icons.Avalonia"
+             xmlns:predatorSense="clr-namespace:PredatorSense"
+             xmlns:avalonia="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
+             x:DataType="predatorSense:Dashboard">
+
+    <UserControl.Styles>
+        <Style Selector="material|MaterialIcon.FanIcon">
+            <Style.Animations>
+                <Animation Duration="0:0:2" IterationCount="Infinite">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="RotateTransform.Angle" Value="360" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Modern Progress Bar Custom Styling -->
+        <Style Selector="ProgressBar">
+            <Setter Property="Height" Value="8" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Background" Value="#10141f" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <Grid Margin="16,12" RowDefinitions="Auto,*" ColumnDefinitions="*,*,*">
+            <!-- Row 1: CPU, GPU, Fan Control -->
+
+            <!-- CPU Card -->
+            <Border Classes="Card" Grid.Row="0" Grid.Column="0" Margin="0,0,8,12">
+                <StackPanel Spacing="10">
+                    <!-- Header -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                            <material:MaterialIcon Kind="Cpu64Bit" Width="22" Height="22" Foreground="#00f0ff" />
+                            <TextBlock x:Name="CpuTitle" Text="CPU Performance" Classes="SubHeader" Margin="0" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <!-- Live CPU Temp Badge -->
+                        <Border Grid.Column="1" Background="#0c2033" BorderBrush="#00f0ff" BorderThickness="1" CornerRadius="8" Padding="8,3">
+                            <TextBlock x:Name="CpuTemperature" Text="{Binding CpuTemp, StringFormat='{}{0}°C'}"
+                                        FontWeight="Bold" FontSize="13" Foreground="#00f0ff" VerticalAlignment="Center" />
+                        </Border>
+                    </Grid>
+
+                    <!-- Model Pill -->
+                    <Border Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" CornerRadius="8" Padding="10,6">
+                        <TextBlock x:Name="CpuModel" Text="{Binding CpuName}" FontWeight="SemiBold"
+                                   FontSize="11" Foreground="#94a3b8" TextTrimming="CharacterEllipsis" />
+                    </Border>
+
+                    <!-- Temperature Metric -->
+                    <StackPanel Spacing="4" Margin="0,4,0,0">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Core Temperature" FontSize="11" Opacity="0.75" VerticalAlignment="Center" Margin="0" />
+                            <TextBlock Grid.Column="1" Text="{Binding CpuTemp, StringFormat='{}{0:F1}°C'}" FontSize="12" FontWeight="SemiBold" Foreground="#eff9ff" Margin="0" />
+                        </Grid>
+                        <ProgressBar x:Name="CpuTemperatureBar" Value="{Binding CpuTemp}" Maximum="110" Height="7" CornerRadius="4"
+                                     Foreground="#00f0ff" Background="#121724" />
+                    </StackPanel>
+
+                    <!-- Usage Metric -->
+                    <StackPanel Spacing="4">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="CPU Utilization" FontSize="11" Opacity="0.75" VerticalAlignment="Center" Margin="0" />
+                            <TextBlock Grid.Column="1" Text="{Binding CpuUsage, StringFormat='{}{0}%'}" FontSize="12" FontWeight="SemiBold" Foreground="#eff9ff" Margin="0" />
+                        </Grid>
+                        <ProgressBar Value="{Binding CpuUsage}" Maximum="100" Height="7" CornerRadius="4"
+                                     Foreground="#38bdf8" Background="#121724" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- GPU Card -->
+            <Border Classes="Card" Grid.Row="0" Grid.Column="1" Margin="4,0,4,12">
+                <StackPanel Spacing="10">
+                    <!-- Header -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                            <material:MaterialIcon Kind="Gpu" Width="22" Height="22" Foreground="#00ff9d" />
+                            <TextBlock x:Name="GpuTitle" Text="GPU Performance" Classes="SubHeader" Margin="0" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <!-- Live GPU Temp Badge -->
+                        <Border Grid.Column="1" Background="#082218" BorderBrush="#00ff9d" BorderThickness="1" CornerRadius="8" Padding="8,3">
+                            <TextBlock x:Name="GpuTemperature" Text="{Binding GpuTemp, StringFormat='{}{0}°C'}"
+                                        FontWeight="Bold" FontSize="13" Foreground="#00ff9d" VerticalAlignment="Center" />
+                        </Border>
+                    </Grid>
+
+                    <!-- Model Pill -->
+                    <Border Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" CornerRadius="8" Padding="10,6">
+                        <TextBlock x:Name="GpuModel" Text="{Binding GpuName}" FontWeight="SemiBold"
+                                   FontSize="11" Foreground="#94a3b8" TextTrimming="CharacterEllipsis" />
+                    </Border>
+
+                    <!-- Temperature Metric -->
+                    <StackPanel Spacing="4" Margin="0,4,0,0">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="GPU Temperature" FontSize="11" Opacity="0.75" VerticalAlignment="Center" Margin="0" />
+                            <TextBlock Grid.Column="1" Text="{Binding GpuTemp, StringFormat='{}{0:F1}°C'}" FontSize="12" FontWeight="SemiBold" Foreground="#eff9ff" Margin="0" />
+                        </Grid>
+                        <ProgressBar x:Name="GpuTemperatureBar" Value="{Binding GpuTemp}" Maximum="110" Height="7" CornerRadius="4"
+                                     Foreground="#00ff9d" Background="#121724" />
+                    </StackPanel>
+
+                    <!-- Usage Metric -->
+                    <StackPanel Spacing="4">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="GPU Utilization" FontSize="11" Opacity="0.75" VerticalAlignment="Center" Margin="0" />
+                            <TextBlock Grid.Column="1" Text="{Binding GpuUsage, StringFormat='{}{0}%'}" FontSize="12" FontWeight="SemiBold" Foreground="#eff9ff" Margin="0" />
+                        </Grid>
+                        <ProgressBar Value="{Binding GpuUsage}" Maximum="100" Height="7" CornerRadius="4"
+                                     Foreground="#10b981" Background="#121724" />
+                    </StackPanel>
+
+                    <!-- Driver Badge -->
+                    <Grid ColumnDefinitions="Auto,*">
+                        <TextBlock Text="Driver:" FontSize="10" Opacity="0.6" VerticalAlignment="Center" Margin="0 0 6 0" />
+                        <TextBlock x:Name="GpuDriver" Grid.Column="1" Text="UNKNOWN" FontSize="10" Foreground="#829ab1" FontWeight="SemiBold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Fan Control Card -->
+            <Border Classes="Card" Grid.Row="0" Grid.Column="2" Margin="8,0,0,12">
+                <StackPanel Spacing="10">
+                    <!-- Header -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                            <material:MaterialIcon Kind="Fan" Width="22" Height="22" Foreground="#00f0ff" />
+                            <TextBlock x:Name="FanControlTitle" Text="AeroBlade Fans" Classes="SubHeader" Margin="0" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <!-- Active Mode Badge -->
+                        <Border Grid.Column="1" Background="#0c2033" BorderBrush="#00f0ff" BorderThickness="1" CornerRadius="8" Padding="8,3">
+                            <TextBlock Text="ACTIVE" FontWeight="Bold" FontSize="10" Foreground="#00f0ff" VerticalAlignment="Center" />
+                        </Border>
+                    </Grid>
+
+                    <!-- Dual Fan Capsule Panels -->
+                    <Grid ColumnDefinitions="*,*" Margin="0,4,0,0">
+                        <!-- CPU Fan Capsule -->
+                        <Border Grid.Column="0" Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" CornerRadius="10" Padding="10" Margin="0,0,5,0">
+                            <StackPanel HorizontalAlignment="Center" Spacing="6">
+                                <material:MaterialIcon x:Name="CpuFanIcon" Classes="FanIcon" Kind="Fan" Width="48" Height="48"
+                                                       Foreground="#00f0ff" HorizontalAlignment="Center" />
+                                <TextBlock Text="CPU Fan" FontSize="11" Opacity="0.75" HorizontalAlignment="Center" Margin="0" />
+                                <TextBlock x:Name="CpuFanSpeed" Text="2400 RPM" FontWeight="Bold" FontSize="14"
+                                           FontFamily="{StaticResource OxaniumBoldFont}" Foreground="#eff9ff" HorizontalAlignment="Center" Margin="0" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- GPU Fan Capsule -->
+                        <Border Grid.Column="1" Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" CornerRadius="10" Padding="10" Margin="5,0,0,0">
+                            <StackPanel HorizontalAlignment="Center" Spacing="6">
+                                <material:MaterialIcon x:Name="GpuFanIcon" Classes="FanIcon" Kind="Fan" Width="48" Height="48"
+                                                       Foreground="#00ff9d" HorizontalAlignment="Center" />
+                                <TextBlock Text="GPU Fan" FontSize="11" Opacity="0.75" HorizontalAlignment="Center" Margin="0" />
+                                <TextBlock x:Name="GpuFanSpeed" Text="3100 RPM" FontWeight="Bold" FontSize="14"
+                                           FontFamily="{StaticResource OxaniumBoldFont}" Foreground="#eff9ff" HorizontalAlignment="Center" Margin="0" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Hidden combobox kept for binding compatibility -->
+                    <ComboBox x:Name="FanModeSelector" SelectedIndex="0" IsVisible="False">
+                        <ComboBoxItem>Auto</ComboBoxItem>
+                        <ComboBoxItem>Performance</ComboBoxItem>
+                        <ComboBoxItem>Silent</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </Border>
+
+            <!-- Row 2: Real-Time Temperature Monitor (Spans 2 columns) -->
+            <Border Classes="Card" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,4,0">
+                <StackPanel Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                            <material:MaterialIcon Kind="Thermometer" Width="20" Height="20" Foreground="#f59e0b" />
+                            <TextBlock x:Name="TemperatureMonitorTitle" Text="Thermal Telemetry Monitor" Classes="SubHeader" Margin="0" VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <!-- Legend Indicators -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+                            <!-- CPU Legend -->
+                            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                <Border Width="8" Height="8" CornerRadius="4" Background="#00f0ff" />
+                                <TextBlock Text="CPU" FontSize="11" FontWeight="SemiBold" Foreground="#eff9ff" Margin="0" />
+                            </StackPanel>
+                            <!-- GPU Legend -->
+                            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                <Border Width="8" Height="8" CornerRadius="4" Background="#00ff9d" />
+                                <TextBlock Text="GPU" FontSize="11" FontWeight="SemiBold" Foreground="#eff9ff" Margin="0" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Real-Time Chart -->
+                    <avalonia:CartesianChart x:Name="TemperatureChart" VerticalAlignment="Stretch" MinHeight="250" />
+                </StackPanel>
+            </Border>
+
+            <!-- Row 2: Battery & Power Status Card -->
+            <Border Classes="Card" Grid.Row="1" Grid.Column="2" Margin="8,0,0,0" IsVisible="{Binding HasBattery}">
+                <StackPanel Spacing="14">
+                    <!-- Header -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                            <material:MaterialIcon Kind="BatteryCharging" Width="22" Height="22" Foreground="#10b981" />
+                            <TextBlock x:Name="BatteryTitle" Text="Battery &amp; Power" Classes="SubHeader" Margin="0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Big Battery Metric Display -->
+                    <Border Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" CornerRadius="12" Padding="16,14">
+                        <StackPanel HorizontalAlignment="Center" Spacing="8">
+                            <TextBlock x:Name="BatteryPercentage"
+                                       Text="{Binding BatteryPercentageInt, StringFormat='{}{0}%'}"
+                                       FontFamily="{StaticResource OxaniumBoldFont}"
+                                       FontSize="36" FontWeight="Bold" Foreground="#eff9ff"
+                                       HorizontalAlignment="Center" Margin="0" />
+                            <ProgressBar x:Name="BatteryLevelBar" Value="70" Maximum="100" Width="180" Height="10" CornerRadius="5"
+                                         Foreground="#10b981" Background="#141a26" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Status Details -->
+                    <StackPanel Spacing="8">
+                        <Border Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" CornerRadius="8" Padding="10,8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Power Source:" Opacity="0.75" FontSize="12" VerticalAlignment="Center" Margin="0" />
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                    <material:MaterialIcon Kind="PowerPlugOutline" Width="16" Height="16" Foreground="#fbbf24" />
+                                    <TextBlock x:Name="PowerSource" Text="{Binding BatteryStatus}" FontWeight="SemiBold" FontSize="12" Foreground="#eff9ff" Margin="0" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" CornerRadius="8" Padding="10,8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Time Remaining:" Opacity="0.75" FontSize="12" VerticalAlignment="Center" Margin="0" />
+                                <TextBlock x:Name="BatteryTimeRemaining" Grid.Column="1"
+                                           Text="{Binding BatteryTimeRemainingString, StringFormat='{}{0}%'}"
+                                           FontWeight="SemiBold" FontSize="12" Foreground="#eff9ff" Margin="0" />
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Hidden combobox kept for binding compatibility -->
+                    <ComboBox x:Name="PowerModeSelector" SelectedIndex="1" IsVisible="False">
+                        <ComboBoxItem>Battery Saver</ComboBoxItem>
+                        <ComboBoxItem>Balanced</ComboBoxItem>
+                        <ComboBoxItem>Performance</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

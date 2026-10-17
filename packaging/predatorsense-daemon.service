@@ -1,0 +1,16 @@
+[Unit]
+Description=PredatorSense Hardware Control Daemon for Acer Laptops
+After=network.target linuwu_sense.service
+Wants=linuwu_sense.service
+
+[Service]
+Type=simple
+ExecStart=/opt/predatorsense/daemon/predatorsense-daemon
+Restart=on-failure
+RestartSec=3
+User=root
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

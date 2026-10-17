@@ -1,0 +1,548 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="PredatorSense.App"
+             RequestedThemeVariant="Dark">
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.Resources>
+        <!-- Oxanium Regular -->
+        <FontFamily x:Key="OxaniumFont">avares://PredatorSense/Assets/Fonts/Oxanium.ttf#Oxanium</FontFamily>
+
+        <!-- Oxanium Bold (same internal name) -->
+        <FontFamily x:Key="OxaniumBoldFont">avares://PredatorSense/Assets/Fonts/Oxanium-Bold.ttf#Oxanium</FontFamily>
+
+        <!-- Open Sans Regular -->
+        <FontFamily x:Key="OpenSansFont">avares://PredatorSense/Assets/Fonts/OpenSans.ttf#Open Sans</FontFamily>
+
+        <!-- Open Sans SemiBold -->
+        <FontFamily x:Key="OpenSansSemiBoldFont">avares://PredatorSense/Assets/Fonts/OpenSans-SemiBold.ttf#Open Sans SemiBold</FontFamily>
+
+
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="avares://Material.Icons.Avalonia/MaterialIconStyles.axaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+
+    </Application.Styles>
+
+    <Application.Styles>
+        <!-- Base Styles -->
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontFamily" Value="{StaticResource OxaniumFont}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="16,12" />
+            <Setter Property="Margin" Value="0,3" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Foreground" Value="#8a99ad" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <Style Selector="TabItem:pointerover">
+            <Setter Property="Background" Value="#151b28" />
+            <Setter Property="Foreground" Value="#f8fafc" />
+        </Style>
+
+        <Style Selector="TabItem:selected">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                    <GradientStop Offset="0" Color="#1c2d44" />
+                    <GradientStop Offset="1" Color="#0d1422" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Foreground" Value="#00f0ff" />
+            <Setter Property="BorderBrush" Value="#00f0ff" />
+            <Setter Property="BorderThickness" Value="3,0,0,0" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <Style Selector="TabControl /template/ WrapPanel">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
+
+        <Style Selector="TextBlock.SectionHeader">
+            <Setter Property="FontSize" Value="21" />
+            <Setter Property="FontFamily" Value="{StaticResource OxaniumBoldFont}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="LetterSpacing" Value="1" />
+            <Setter Property="Margin" Value="0 15 0 10" />
+            <Setter Property="Foreground" Value="#f1f5f9" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+
+        <Style Selector="TextBlock.SubHeader">
+            <Setter Property="FontFamily" Value="{StaticResource OxaniumBoldFont}" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#e2e8f0" />
+            <Setter Property="Margin" Value="0 10 0 5" />
+        </Style>
+
+        <Style Selector="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontFamily" Value="{StaticResource OpenSansFont}" />
+            <Setter Property="Foreground" Value="#cbd5e1" />
+            <Setter Property="Margin" Value="0 10 0 5" />
+        </Style>
+
+        <!-- Predator Cyber Glass Card -->
+        <Style Selector="Border.Card">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                    <GradientStop Offset="0" Color="#10141f" />
+                    <GradientStop Offset="1" Color="#0b0e16" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="BorderBrush" Value="#1d2538" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="14" />
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="Margin" Value="0 5 0 15" />
+        </Style>
+
+        <Style Selector="Slider">
+            <Setter Property="Margin" Value="0 5" />
+            <Setter Property="Minimum" Value="0" />
+            <Setter Property="Maximum" Value="100" />
+            <Setter Property="TickFrequency" Value="10" />
+            <Setter Property="IsSnapToTickEnabled" Value="True" />
+            <Setter Property="Foreground" Value="#00f0ff" />
+        </Style>
+
+        <!-- Predator Neon Cyber Button Styles -->
+        <Style Selector="Button">
+            <Setter Property="FontFamily" Value="{StaticResource OxaniumBoldFont}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="LetterSpacing" Value="0.5" />
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                    <GradientStop Offset="0" Color="#00f0ff" />
+                    <GradientStop Offset="1" Color="#0099ff" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Foreground" Value="#08090d" />
+            <Setter Property="Padding" Value="16 8" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Margin" Value="0 5" />
+            <Setter Property="BorderBrush" Value="#38bdf8" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+
+        <Style Selector="Button:pointerover">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                    <GradientStop Offset="0" Color="#38bdf8" />
+                    <GradientStop Offset="1" Color="#00e5ff" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Foreground" Value="#040508" />
+            <Setter Property="BorderBrush" Value="#7dd3fc" />
+        </Style>
+
+        <Style Selector="Button.SecondaryButton">
+            <Setter Property="Background" Value="#141824" />
+            <Setter Property="BorderBrush" Value="#232c40" />
+            <Setter Property="Foreground" Value="#e2e8f0" />
+            <Setter Property="FontFamily" Value="{StaticResource OpenSansSemiBoldFont}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="Button.SecondaryButton:pointerover">
+            <Setter Property="Background" Value="#1c2336" />
+            <Setter Property="BorderBrush" Value="#00f0ff" />
+            <Setter Property="Foreground" Value="#ffffff" />
+        </Style>
+
+        <Style Selector="Button.SuccessButton">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                    <GradientStop Offset="0" Color="#00ff9d" />
+                    <GradientStop Offset="1" Color="#059669" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="BorderBrush" Value="#10b981" />
+            <Setter Property="Foreground" Value="#061a12" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <Style Selector="Button:pressed">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                    <GradientStop Offset="0" Color="#0284c7" />
+                    <GradientStop Offset="1" Color="#0369a1" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="BorderBrush" Value="#0284c7" />
+            <Setter Property="Foreground" Value="#ffffff" />
+        </Style>
+
+        <Style Selector="Button:disabled">
+            <Setter Property="Background" Value="#131722" />
+            <Setter Property="Foreground" Value="#475569" />
+            <Setter Property="BorderBrush" Value="#1e2433" />
+        </Style>
+
+        <!-- Predator Cyber Gaming Radio Button Card Style -->
+        <Style Selector="RadioButton">
+            <Setter Property="FontFamily" Value="{StaticResource OxaniumFont}" />
+            <Setter Property="Height" Value="108" />
+            <Setter Property="Width" Value="132" />
+            <Setter Property="Background" Value="#0f121b" />
+            <Setter Property="Foreground" Value="#94a3b8" />
+            <Setter Property="BorderBrush" Value="#1d2334" />
+            <Setter Property="BorderThickness" Value="1.5" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Panel>
+                        <Border Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}">
+                            <ContentPresenter Name="PART_ContentPresenter"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Padding="{TemplateBinding Padding}"
+                                              Foreground="{TemplateBinding Foreground}" />
+                        </Border>
+                    </Panel>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <!-- Pointer over state -->
+        <Style Selector="RadioButton:pointerover /template/ Border#border">
+            <Setter Property="Background" Value="#151b28" />
+            <Setter Property="BorderBrush" Value="#00f0ff" />
+        </Style>
+
+        <!-- Pressed state -->
+        <Style Selector="RadioButton:pressed /template/ Border#border">
+            <Setter Property="Background" Value="#0f2236" />
+            <Setter Property="BorderBrush" Value="#00f0ff" />
+        </Style>
+
+        <!-- Selected state -->
+        <Style Selector="RadioButton:checked /template/ Border#border">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                    <GradientStop Offset="0" Color="#0e2338" />
+                    <GradientStop Offset="1" Color="#081422" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="BorderBrush" Value="#00f0ff" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+
+        <Style Selector="RadioButton:checked">
+            <Setter Property="Foreground" Value="#ffffff" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <!-- Selected + Pointer over state -->
+        <Style Selector="RadioButton:checked:pointerover /template/ Border#border">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                    <GradientStop Offset="0" Color="#13314d" />
+                    <GradientStop Offset="1" Color="#0b1b2d" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="BorderBrush" Value="#38bdf8" />
+        </Style>
+
+        <!-- Selected + Pressed state -->
+        <Style Selector="RadioButton:checked:pressed /template/ Border#border">
+            <Setter Property="Background" Value="#0a1a2b" />
+            <Setter Property="BorderBrush" Value="#00d4ff" />
+        </Style>
+
+        <!-- Disabled state -->
+        <Style Selector="RadioButton:disabled /template/ Border#border">
+            <Setter Property="Background" Value="#0a0c12" />
+            <Setter Property="BorderBrush" Value="#141822" />
+            <Setter Property="Opacity" Value="0.35" />
+        </Style>
+
+        <Style Selector="RadioButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="#475569" />
+        </Style>
+
+        <!-- Compact Radio Button (for direction selectors, toggles) -->
+        <Style Selector="RadioButton.Compact">
+            <Setter Property="Height" Value="38" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="Width" Value="NaN" />
+            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="#121622" />
+            <Setter Property="BorderBrush" Value="#222a3d" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="#94a3b8" />
+        </Style>
+        <Style Selector="RadioButton.Compact TextBlock">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="RadioButton.Compact:pointerover /template/ Border#border">
+            <Setter Property="Background" Value="#1a2030" />
+            <Setter Property="BorderBrush" Value="#00f0ff" />
+        </Style>
+        <Style Selector="RadioButton.Compact:checked /template/ Border#border">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                    <GradientStop Offset="0" Color="#0f2d47" />
+                    <GradientStop Offset="1" Color="#006699" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="BorderBrush" Value="#00f0ff" />
+        </Style>
+        <Style Selector="RadioButton.Compact:checked">
+            <Setter Property="Foreground" Value="#ffffff" />
+        </Style>
+
+        <!-- Predator Segmented Tab Radio Button (Global / Area / Logo / Wallpaper) -->
+        <Style Selector="RadioButton.SegmentTab">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Width" Value="NaN" />
+            <Setter Property="Padding" Value="20,0" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="FontFamily" Value="{StaticResource OxaniumBoldFont}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="LetterSpacing" Value="0.8" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#8a99ad" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="RadioButton.SegmentTab TextBlock">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="RadioButton.SegmentTab:pointerover /template/ Border#border">
+            <Setter Property="Background" Value="#151d2c" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="RadioButton.SegmentTab:pointerover">
+            <Setter Property="Foreground" Value="#ffffff" />
+        </Style>
+        <Style Selector="RadioButton.SegmentTab:checked /template/ Border#border">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                    <GradientStop Offset="0" Color="#00b4d8" />
+                    <GradientStop Offset="1" Color="#0077b6" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="RadioButton.SegmentTab:checked">
+            <Setter Property="Foreground" Value="#ffffff" />
+        </Style>
+
+        <!-- Predator Effect Card Button (Grid layout under Select Effect) -->
+        <Style Selector="RadioButton.EffectCard">
+            <Setter Property="Height" Value="42" />
+            <Setter Property="Width" Value="164" />
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Background" Value="#0c1018" />
+            <Setter Property="BorderBrush" Value="#1c2436" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="#94a3b8" />
+            <Setter Property="FontFamily" Value="{StaticResource OxaniumFont}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="RadioButton.EffectCard TextBlock">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="RadioButton.EffectCard:pointerover /template/ Border#border">
+            <Setter Property="Background" Value="#141c2b" />
+            <Setter Property="BorderBrush" Value="#00f0ff" />
+        </Style>
+        <Style Selector="RadioButton.EffectCard:pointerover">
+            <Setter Property="Foreground" Value="#ffffff" />
+        </Style>
+        <Style Selector="RadioButton.EffectCard:checked /template/ Border#border">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                    <GradientStop Offset="0" Color="#093147" />
+                    <GradientStop Offset="1" Color="#0e4763" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="BorderBrush" Value="#00f0ff" />
+            <Setter Property="BorderThickness" Value="1.5" />
+        </Style>
+        <Style Selector="RadioButton.EffectCard:checked">
+            <Setter Property="Foreground" Value="#00f0ff" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <!-- Quick Color Swatch Round Button -->
+        <Style Selector="Button.ColorSwatch">
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="BorderThickness" Value="1.5" />
+            <Setter Property="BorderBrush" Value="#222a3d" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <!-- Realistic Predator Chiclet Keycap Styles -->
+        <Style Selector="Border.PSKey">
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Margin" Value="1.5" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#25000000" />
+            <Setter Property="ClipToBounds" Value="False" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.06" />
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.06" />
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.05" />
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="Border.PSKey:pointerover">
+            <Setter Property="BorderBrush" Value="#ffffff" />
+            <Setter Property="BorderThickness" Value="1.5" />
+        </Style>
+
+        <Style Selector="Border.PSKey.SelectedKey">
+            <Setter Property="BorderBrush" Value="#ffffff" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+
+        <Style Selector="TextBlock.PSKeyLabel">
+            <Setter Property="FontSize" Value="9.5" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#09141a" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style Selector="Border.KeyWasd TextBlock.PSKeyLabel">
+            <Setter Property="FontWeight" Value="ExtraBold" />
+            <Setter Property="FontSize" Value="10.5" />
+        </Style>
+
+        <Style Selector="Border.PSKeyBadge">
+            <Setter Property="Width" Value="11" />
+            <Setter Property="Height" Value="11" />
+            <Setter Property="CornerRadius" Value="2" />
+            <Setter Property="Background" Value="#ffffff" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="Margin" Value="0,0,2,2" />
+        </Style>
+
+        <!-- Legacy Fallback Keycap styling -->
+        <Style Selector="Border.Keycap">
+            <Setter Property="Background" Value="#121622" />
+            <Setter Property="BorderBrush" Value="#253046" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="Padding" Value="2,1" />
+            <Setter Property="Margin" Value="1.5" />
+            <Setter Property="Height" Value="22" />
+        </Style>
+        <Style Selector="Border.Keycap TextBlock">
+            <Setter Property="FontSize" Value="8.5" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#94a3b8" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <!-- Sleek Cyber Play & Stop Effect Action Buttons -->
+        <Style Selector="Button.PlayEffectBtn">
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Padding" Value="18,0" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="FontFamily" Value="{StaticResource OxaniumBoldFont}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="LetterSpacing" Value="0.6" />
+            <Setter Property="Foreground" Value="#00ff9d" />
+            <Setter Property="Background" Value="#081a17" />
+            <Setter Property="BorderThickness" Value="1.5" />
+            <Setter Property="BorderBrush" Value="#00ff9d" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.08" />
+                    <BrushTransition Property="Background" Duration="0:0:0.1" />
+                    <BrushTransition Property="Foreground" Duration="0:0:0.1" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.PlayEffectBtn:pointerover">
+            <Setter Property="Background" Value="#00ff9d" />
+            <Setter Property="Foreground" Value="#000000" />
+            <Setter Property="BorderBrush" Value="#5eead4" />
+            <Setter Property="RenderTransform" Value="scale(1.025)" />
+        </Style>
+        <Style Selector="Button.PlayEffectBtn:pressed">
+            <Setter Property="Background" Value="#059669" />
+            <Setter Property="Foreground" Value="#ffffff" />
+            <Setter Property="RenderTransform" Value="scale(0.97)" />
+        </Style>
+
+        <Style Selector="Button.StopEffectBtn">
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Padding" Value="18,0" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="FontFamily" Value="{StaticResource OxaniumBoldFont}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="LetterSpacing" Value="0.6" />
+            <Setter Property="Foreground" Value="#ff6b8b" />
+            <Setter Property="Background" Value="#170c14" />
+            <Setter Property="BorderThickness" Value="1.5" />
+            <Setter Property="BorderBrush" Value="#ff2a55" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.08" />
+                    <BrushTransition Property="Background" Duration="0:0:0.1" />
+                    <BrushTransition Property="Foreground" Duration="0:0:0.1" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.StopEffectBtn:pointerover">
+            <Setter Property="Background" Value="#ff2a55" />
+            <Setter Property="Foreground" Value="#ffffff" />
+            <Setter Property="BorderBrush" Value="#ff5577" />
+            <Setter Property="RenderTransform" Value="scale(1.025)" />
+        </Style>
+        <Style Selector="Button.StopEffectBtn:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.97)" />
+        </Style>
+    </Application.Styles>
+
+</Application>

@@ -1,0 +1,1716 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:PredatorSense"
+        xmlns:material="using:Material.Icons.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
+
+        x:Class="PredatorSense.MainWindow"
+        Title="PredatorSense"
+        Icon="iconTransparent.png"
+        WindowStartupLocation="CenterScreen"
+        SystemDecorations="Full"
+        Background="#08090d"
+
+        Width="1200" Height="700"
+        MinWidth="1200" MinHeight="480">
+
+
+    <Grid>
+
+        <Grid RowDefinitions="Auto,*">
+
+            <!-- Modern Predator Gaming Header -->
+            <Border Grid.Row="0" Background="#0b0d14" BorderBrush="#181e2b" BorderThickness="0 0 0 1" Padding="18 12">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <!-- Brand & Logo -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="12">
+                        <Image Source="closeupTransparent.png" Height="34" VerticalAlignment="Center" />
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock FontSize="18" FontWeight="Bold" LetterSpacing="3"
+                                       FontFamily="{StaticResource OxaniumBoldFont}">
+                                <Run Text="PREDATOR" Foreground="#ffffff" />
+                                <Run Text=" " />
+                                <Run Text="SENSE" Foreground="#00f0ff" />
+                            </TextBlock>
+                            <TextBlock Text="Helios Gaming Control Suite" FontSize="11" Foreground="#64748b" Margin="0 -2 0 0"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Real-Time Header Quick Telemetry Status Badges -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                        <!-- CPU Temp Pill -->
+                        <Border Background="#0a121c" BorderBrush="#16293d" BorderThickness="1" CornerRadius="8" Padding="10 5">
+                            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                <material:MaterialIcon Kind="Cpu64Bit" Foreground="#00f0ff" Width="16" Height="16"/>
+                                <TextBlock x:Name="HeaderCpuTempText" Text="CPU: --°C" FontSize="12" FontWeight="SemiBold" Foreground="#eff9ff"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- GPU Temp Pill -->
+                        <Border Background="#081812" BorderBrush="#133d2b" BorderThickness="1" CornerRadius="8" Padding="10 5">
+                            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                <material:MaterialIcon Kind="Gpu" Foreground="#00ff9d" Width="16" Height="16"/>
+                                <TextBlock x:Name="HeaderGpuTempText" Text="GPU: --°C" FontSize="12" FontWeight="SemiBold" Foreground="#eff9ff"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Power / Battery Pill -->
+                        <Border Background="#1a1409" BorderBrush="#3d2c10" BorderThickness="1" CornerRadius="8" Padding="10 5">
+                            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                <material:MaterialIcon x:Name="HeaderPowerIcon" Kind="PowerPlugOutline" Foreground="#f59e0b" Width="16" Height="16"/>
+                                <TextBlock x:Name="HeaderBatteryText" Text="AC 80%" FontSize="12" FontWeight="SemiBold" Foreground="#eff9ff"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Daemon Status Badge -->
+                        <Border x:Name="HeaderDaemonBadge" Background="#081e14" BorderBrush="#00ff9d" BorderThickness="1" CornerRadius="8" Padding="10 5">
+                            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                <Border Width="8" Height="8" CornerRadius="4" Background="#00ff9d"/>
+                                <TextBlock Text="ONLINE" FontSize="11" FontWeight="Bold" Foreground="#00ff9d"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Main Content -->
+            <TabControl x:Name="MainTabControl" Grid.Row="1" Margin="10,8,10,10" CornerRadius="14" Background="#0b0e16" BorderBrush="#181e2b"
+                        BorderThickness="1" TabStripPlacement="Left" SelectedIndex="0">
+
+                <!-- Dashboard Tab -->
+                <TabItem x:Name="DashboardTab">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                            <material:MaterialIcon Kind="ViewDashboardOutline" Width="18" Height="18" Foreground="#00f0ff"/>
+                            <TextBlock Text="Dashboard" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <views:Dashboard />
+
+                </TabItem>
+
+                <!-- Power & Performance Tab -->
+                <TabItem x:Name="PerformanceTab">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                            <material:MaterialIcon Kind="Speedometer" Width="18" Height="18" Foreground="#f59e0b"/>
+                            <TextBlock Text="Performance" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <ScrollViewer>
+                        <StackPanel Margin="10,0,20,0">
+                            <TextBlock Text="Power &amp; Performance" Classes="SectionHeader" />
+
+                            <Border Classes="Card" x:Name="ThermalProfilePanel">
+                                <StackPanel>
+                                    <!-- Header row with switch -->
+                                    <Grid ColumnDefinitions="*,Auto" Margin="0 0 0 10">
+                                        <TextBlock Text="Performance Profiles" Classes="SubHeader"
+                                                   VerticalAlignment="Center" />
+                                        <ToggleSwitch x:Name="PluggedInToggleSwitch" Grid.Column="1"
+                                                      VerticalAlignment="Center" IsChecked="True"
+                                                      IsHitTestVisible="False">
+                                            <ToggleSwitch.OffContent>
+                                                <material:MaterialIcon Kind="BatteryOutline" Width="24" Height="24" />
+                                            </ToggleSwitch.OffContent>
+                                            <ToggleSwitch.OnContent>
+                                                <material:MaterialIcon Kind="PowerPlugOutline" Width="24" Height="24" />
+                                            </ToggleSwitch.OnContent>
+                                        </ToggleSwitch>
+                                    </Grid>
+
+                                    <TextBlock Text="Configure thermal profiles to balance performance and temperature"
+                                               Opacity="0.7" Margin="0 0 0 10" />
+
+                                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" Margin="0 10">
+                                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal"
+                                                    Margin="0 5 0 0" HorizontalAlignment="Center">
+                                            <RadioButton x:Name="LowPowerProfileButton" GroupName="ProfileGroup"
+                                                         Margin="0 0 12 0"
+                                                         IsVisible="{Binding ElementName=PluggedInToggleSwitch, Path=!IsChecked}">
+                                                <StackPanel Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="Leaf" Width="36" Height="36" Foreground="#00ff88" HorizontalAlignment="Center" />
+                                                    <TextBlock Text="Eco" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0" />
+                                                    <TextBlock Text="Power Saver" FontSize="10" Opacity="0.65" HorizontalAlignment="Center" Margin="0" />
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <RadioButton x:Name="QuietProfileButton" GroupName="ProfileGroup"
+                                                         Margin="0 0 12 0"
+                                                         IsVisible="{Binding ElementName=PluggedInToggleSwitch, Path=IsChecked}">
+                                                <StackPanel Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="FanMinus" Width="36" Height="36" Foreground="#38bdf8" HorizontalAlignment="Center" />
+                                                    <TextBlock Text="Quiet" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0" />
+                                                    <TextBlock Text="Silent Fans" FontSize="10" Opacity="0.65" HorizontalAlignment="Center" Margin="0" />
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <RadioButton x:Name="BalancedProfileButton" GroupName="ProfileGroup"
+                                                         Margin="0 0 12 0" IsChecked="True">
+                                                <StackPanel Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="SpeedometerMedium" Width="36" Height="36" Foreground="#00d4ff" HorizontalAlignment="Center" />
+                                                    <TextBlock Text="Balanced" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0" />
+                                                    <TextBlock Text="Optimal Tuning" FontSize="10" Opacity="0.65" HorizontalAlignment="Center" Margin="0" />
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <RadioButton x:Name="PerformanceProfileButton" GroupName="ProfileGroup"
+                                                         Margin="0 0 12 0"
+                                                         IsVisible="{Binding ElementName=PluggedInToggleSwitch, Path=IsChecked}">
+                                                <StackPanel Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="Rocket" Width="36" Height="36" Foreground="#f59e0b" HorizontalAlignment="Center" />
+                                                    <TextBlock Text="Performance" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0" />
+                                                    <TextBlock Text="High Clocks" FontSize="10" Opacity="0.65" HorizontalAlignment="Center" Margin="0" />
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <RadioButton x:Name="TurboProfileButton" GroupName="ProfileGroup"
+                                                         Margin="0 0 12 0"
+                                                         IsVisible="{Binding ElementName=PluggedInToggleSwitch, Path=IsChecked}">
+                                                <StackPanel Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="RocketLaunch" Width="36" Height="36" Foreground="#ff2a55" HorizontalAlignment="Center" />
+                                                    <TextBlock Text="Turbo" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0" />
+                                                    <TextBlock Text="Max Overclock" FontSize="10" Opacity="0.65" HorizontalAlignment="Center" Margin="0" />
+                                                </StackPanel>
+                                            </RadioButton>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Informational banner -->
+                                    <Border Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="8" Padding="12 8" Margin="0 10 0 0">
+                                        <Grid ColumnDefinitions="Auto,*">
+                                            <material:MaterialIcon Kind="InformationOutline" Width="18" Height="18" Foreground="#00f0ff" Margin="0 0 10 0" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" x:Name="ThermalProfileInfoText" Opacity="0.8" FontSize="12"
+                                                       Text="Performance profiles are preset modes that control your device's speed, power use, and cooling."
+                                                       VerticalAlignment="Center" TextWrapping="Wrap" Margin="0" />
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Fan Speed Control -->
+                            <Border Classes="Card" x:Name="FanControlPanel">
+                                <StackPanel>
+                                    <TextBlock Text="Fan Speed Control" Classes="SubHeader" />
+                                    <TextBlock Text="Set custom fan speeds for CPU and GPU" Opacity="0.7"
+                                               Margin="0 0 0 10" />
+
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <RadioButton x:Name="AutoFanSpeedRadioButton" GroupName="FanModeGroup"
+                                                     Margin="0 0 12 0" IsChecked="True">
+                                            <StackPanel Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <material:MaterialIcon Kind="AutoAwesome" Width="36" Height="36" Foreground="#00f0ff" HorizontalAlignment="Center" />
+                                                <TextBlock Text="Auto" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0" />
+                                                <TextBlock Text="Dynamic RPM" FontSize="10" Opacity="0.65" HorizontalAlignment="Center" Margin="0" />
+                                            </StackPanel>
+                                        </RadioButton>
+
+                                        <RadioButton x:Name="MaxFanSpeedRadioButton" GroupName="FanModeGroup"
+                                                     Margin="0 0 12 0"
+                                                     Click="MaxFanSpeedRadioButton_OnClick">
+                                            <StackPanel Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <material:MaterialIcon Kind="Turbine" Width="36" Height="36" Foreground="#ff2a55" HorizontalAlignment="Center" />
+                                                <TextBlock Text="Max" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0" />
+                                                <TextBlock Text="100% Full Speed" FontSize="10" Opacity="0.65" HorizontalAlignment="Center" Margin="0" />
+                                            </StackPanel>
+                                        </RadioButton>
+
+                                        <RadioButton x:Name="ManualFanSpeedRadioButton" GroupName="FanModeGroup"
+                                                     Margin="0 0 12 0">
+                                            <StackPanel Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <material:MaterialIcon Kind="TuneVariant" Width="36" Height="36" Foreground="#c084fc" HorizontalAlignment="Center" />
+                                                <TextBlock Text="Manual" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0" />
+                                                <TextBlock Text="Custom Sliders" FontSize="10" Opacity="0.65" HorizontalAlignment="Center" Margin="0" />
+                                            </StackPanel>
+                                        </RadioButton>
+
+                                    </StackPanel>
+                                    <TextBlock x:Name="ManualDisabledInfoText" Opacity="0.5"
+                                               Text="Manual fan controls are disabled to ensure quiet operation"
+                                               HorizontalAlignment="Center" Margin="0,20,0 ,0"
+                                               IsVisible="{Binding ElementName=QuietProfileButton, Path=IsChecked}" />
+
+                                    <StackPanel IsVisible="{Binding ElementName=ManualFanSpeedRadioButton, Path=IsChecked}" Margin="0 15 0 0">
+                                        <Border Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="10" Padding="16 12">
+                                            <StackPanel Spacing="14">
+                                                <!-- CPU Fan Slider -->
+                                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Width="105">
+                                                        <material:MaterialIcon Kind="Fan" Width="18" Height="18" Foreground="#00f0ff" />
+                                                        <TextBlock Text="CPU Fan:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0" />
+                                                    </StackPanel>
+                                                    <Slider x:Name="CpuFanSlider" Grid.Column="1" Value="50" Margin="10 0" Foreground="#00f0ff" />
+                                                    <Border Grid.Column="2" Background="#0f1420" BorderBrush="#1e283d" BorderThickness="1" CornerRadius="6" Padding="8 3" Width="55">
+                                                        <TextBlock x:Name="CpuFanTextBlock" Text="50%" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Foreground="#00f0ff" />
+                                                    </Border>
+                                                </Grid>
+
+                                                <!-- GPU Fan Slider -->
+                                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Width="105">
+                                                        <material:MaterialIcon Kind="Fan" Width="18" Height="18" Foreground="#00ff9d" />
+                                                        <TextBlock Text="GPU Fan:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0" />
+                                                    </StackPanel>
+                                                    <Slider x:Name="GpuFanSlider" Grid.Column="1" Value="70" Margin="10 0" Foreground="#00ff9d" />
+                                                    <Border Grid.Column="2" Background="#0f1420" BorderBrush="#1e283d" BorderThickness="1" CornerRadius="6" Padding="8 3" Width="55">
+                                                        <TextBlock x:Name="GpuFanTextBlock" Text="70%" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Foreground="#00ff9d" />
+                                                    </Border>
+                                                </Grid>
+
+                                                <Grid ColumnDefinitions="Auto,*">
+                                                    <Button x:Name="SetManualSpeedButton" Content="Apply Fan Settings" Click="SetManualSpeedButton_OnClick" Margin="0" />
+                                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="15 0 0 0">
+                                                        <material:MaterialIcon Kind="AlertOutline" Foreground="#f59e0b" Width="16" Height="16" />
+                                                        <TextBlock Text="Note: Low fan speeds under heavy load may cause thermal throttling" Foreground="#f59e0b" FontSize="11" Margin="0" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- Power Controls Tab -->
+                <TabItem x:Name="BatteryPanel">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                            <material:MaterialIcon Kind="BatteryCharging" Width="18" Height="18" Foreground="#00ff9d"/>
+                            <TextBlock Text="Battery &amp; Power" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <ScrollViewer>
+                        <StackPanel Margin="10,0,20,0">
+                            <TextBlock Text="Power Controls" Classes="SectionHeader" />
+
+                            <!-- Battery Calibration -->
+                            <Border Classes="Card" x:Name="CalibrationControls" Margin="0 0 0 14">
+                                <StackPanel Spacing="10">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                            <material:MaterialIcon Kind="BatterySync" Width="20" Height="20" Foreground="#00f0ff"/>
+                                            <TextBlock Text="Battery Calibration" Classes="SubHeader" Margin="0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <Border Grid.Column="1" Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="8" Padding="10 4">
+                                            <TextBlock x:Name="CalibrationStatusTextBlock" Text="Status: Ready" FontWeight="SemiBold" FontSize="11" Foreground="#94a3b8" VerticalAlignment="Center" Margin="0" />
+                                        </Border>
+                                    </Grid>
+
+                                    <TextBlock Text="Calibrates the battery gauge by performing a full charge, drain, and recharge cycle for accurate capacity reporting."
+                                               Opacity="0.75" FontSize="12" TextWrapping="Wrap" Margin="0" />
+
+                                    <Border Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="8" Padding="10 8">
+                                        <Grid ColumnDefinitions="Auto,*">
+                                            <material:MaterialIcon Kind="AlertOutline" Foreground="#f59e0b" Width="16" Height="16" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="1" Text="Important: Keep AC adapter connected continuously during the entire calibration process." Foreground="#f59e0b" FontSize="11" VerticalAlignment="Center" Margin="0"/>
+                                        </Grid>
+                                    </Border>
+
+                                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0 5 0 0">
+                                        <Button x:Name="StartCalibrationButton" Content="Start Calibration" Margin="0" />
+                                        <Button x:Name="StopCalibrationButton" Content="Stop Calibration" IsEnabled="False" Classes="SecondaryButton" Margin="0" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Charge Limit -->
+                            <Border Classes="Card" x:Name="LimiterControls" Margin="0 0 0 14">
+                                <StackPanel Spacing="10">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                            <material:MaterialIcon Kind="BatteryHeartVariant" Width="20" Height="20" Foreground="#00ff9d"/>
+                                            <TextBlock Text="Battery Health Charge Limit" Classes="SubHeader" Margin="0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <Border Grid.Column="1" Background="#081e14" BorderBrush="#00ff9d" BorderThickness="1" CornerRadius="8" Padding="8 3">
+                                            <TextBlock Text="80% CAP" FontWeight="Bold" FontSize="10" Foreground="#00ff9d" VerticalAlignment="Center" Margin="0" />
+                                        </Border>
+                                    </Grid>
+
+                                    <TextBlock Text="Limits maximum battery charge to 80% to dramatically extend battery cycle longevity."
+                                               Opacity="0.75" FontSize="12" Margin="0" />
+
+                                    <CheckBox x:Name="BatteryLimitCheckBox" Content="Enable 80% Battery Charge Limit" Margin="0 4 0 0" />
+
+                                    <TextBlock Text="Recommended for gaming laptops frequently plugged into AC power for prolonged sessions."
+                                               Opacity="0.6" FontSize="11" TextWrapping="Wrap" Margin="0" />
+                                 </StackPanel>
+                            </Border>
+
+                            <!-- USB Power Delivery -->
+                            <Border Classes="Card" x:Name="UsbChargingPanel" Margin="0 0 0 14">
+                                <StackPanel Spacing="10">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                            <material:MaterialIcon Kind="UsbPort" Width="20" Height="20" Foreground="#f59e0b"/>
+                                            <TextBlock Text="USB Power Delivery (Power-Off Charging)" Classes="SubHeader" Margin="0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <TextBlock Text="Allows charging external mobile devices through the laptop USB ports even while the machine is powered off or in sleep mode."
+                                               Opacity="0.75" FontSize="12" Margin="0" />
+
+                                    <Grid ColumnDefinitions="Auto,*" Margin="0 4 0 0">
+                                        <TextBlock Text="Auto-cutoff threshold:" VerticalAlignment="Center" FontSize="12" Margin="0 0 12 0" />
+                                        <ComboBox x:Name="UsbChargingComboBox" SelectedIndex="2" Width="280" Grid.Column="1"
+                                                  HorizontalAlignment="Left"
+                                                  SelectionChanged="UsbChargingComboBox_OnSelectionChanged">
+                                            <ComboBoxItem Content="Disabled" />
+                                            <ComboBoxItem Content="Cut off when battery reaches 10%" />
+                                            <ComboBoxItem Content="Cut off when battery reaches 20%" />
+                                            <ComboBoxItem Content="Cut off when battery reaches 30%" />
+                                        </ComboBox>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- Keyboard Lighting Tab -->
+                <TabItem x:Name="KeyboardLightingPanel">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                            <material:MaterialIcon Kind="KeyboardOutline" Width="18" Height="18" Foreground="#c084fc"/>
+                            <TextBlock Text="RGB Lighting" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <!-- Modern Predator Lighting Control Layout -->
+                    <Grid RowDefinitions="Auto,Auto,*">
+                        <!-- Top Centered Header & Segmented Sub-Tab Switcher -->
+                        <Grid Grid.Row="0" Margin="10,6,10,8">
+                            <StackPanel HorizontalAlignment="Center" Spacing="4">
+                                <TextBlock Text="Lighting Control" FontFamily="{StaticResource OxaniumBoldFont}" FontSize="15" FontWeight="Bold"
+                                           Foreground="#00f0ff" LetterSpacing="2" HorizontalAlignment="Center"/>
+                                <Border Background="#07090e" BorderBrush="#1c2538" BorderThickness="1" CornerRadius="10" Padding="4">
+                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                        <RadioButton x:Name="RgbTabGlobalBtn" Classes="SegmentTab" Content="Global" IsChecked="True" GroupName="RgbSubNavGroup" Click="RgbSubTab_Click"/>
+                                        <RadioButton x:Name="RgbTabAreaBtn" Classes="SegmentTab" Content="Area" GroupName="RgbSubNavGroup" Click="RgbSubTab_Click"/>
+                                        <RadioButton x:Name="RgbTabLogoBtn" Classes="SegmentTab" Content="Logo &amp; Lid" GroupName="RgbSubNavGroup" Click="RgbSubTab_Click"/>
+                                        <RadioButton x:Name="RgbTabWallpaperBtn" Classes="SegmentTab" Content="Wallpaper FX" GroupName="RgbSubNavGroup" Click="RgbSubTab_Click"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Master Keyboard Brightness & Inactivity Bar -->
+                        <Border Grid.Row="1" Background="#0b0e16" BorderBrush="#181e2b" BorderThickness="1" CornerRadius="10" Padding="14 6" Margin="10 0 10 10">
+                            <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                    <material:MaterialIcon Kind="LightbulbOutline" Width="18" Height="18" Foreground="#64748b" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Keyboard Brightness:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0"/>
+                                </StackPanel>
+                                <Slider x:Name="KeyBrightnessSlider" Grid.Column="1" Value="100" Margin="14 0" Foreground="#00f0ff" VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="0 0 16 0">
+                                    <material:MaterialIcon Kind="LightbulbOn" Width="18" Height="18" Foreground="#00f0ff" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="KeyBrightnessText" Text="100%" FontWeight="Bold" Width="42" Foreground="#00f0ff" VerticalAlignment="Center" Margin="0"/>
+                                </StackPanel>
+                                <CheckBox Grid.Column="3" x:Name="BacklightTimeoutCheckBox" Content="Auto-off after 30s" IsChecked="True" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Hidden Compatibility Controls (Maintains 100% C# Binding Integrity) -->
+                        <StackPanel Grid.Row="0" IsVisible="False">
+                            <ScrollViewer x:Name="KeyboardLightingScrollViewer" />
+                            <ComboBox x:Name="DynamicEffectsSelector">
+                                <ComboBoxItem Content="Static (Global All Zones)" Tag="static"/>
+                                <ComboBoxItem Content="Wave Mode" Tag="hw_wave"/>
+                                <ComboBoxItem Content="Neon Mode" Tag="hw_neon"/>
+                                <ComboBoxItem Content="Breathing Mode" Tag="hw_breathing"/>
+                                <ComboBoxItem Content="Shifting Mode" Tag="hw_shifting"/>
+                                <ComboBoxItem Content="Zoom Mode" Tag="hw_zoom"/>
+                                <ComboBoxItem Content="Meteor Storm" Tag="hw_meteor"/>
+                                <ComboBoxItem Content="Starry Twinkle" Tag="hw_twinkling"/>
+                                <ComboBoxItem Content="CPU Temp Reactive" Tag="sw_cpu_heatmap"/>
+                                <ComboBoxItem Content="Fire &amp; Lava Ember" Tag="sw_fire_ember"/>
+                                <ComboBoxItem Content="Police Interceptor" Tag="sw_police_strobe"/>
+                                <ComboBoxItem Content="Matrix Cyber Rain" Tag="sw_matrix_rain"/>
+                                <ComboBoxItem Content="Knight Rider Beam" Tag="sw_cylon_scanner"/>
+                                <ComboBoxItem Content="Cyberpunk Night City" Tag="sw_cyberpunk_pulse"/>
+                                <ComboBoxItem Content="Rainbow Chroma Flow" Tag="sw_rainbow_flow"/>
+                                <ComboBoxItem Content="Aurora Borealis" Tag="sw_aurora"/>
+                                <ComboBoxItem Content="Battery Fuel Gauge" Tag="sw_battery_fuel"/>
+                            </ComboBox>
+                            <ComboBox x:Name="LightingModeComboBox" />
+                            <Slider x:Name="LightingSpeedSlider" />
+                            <TextBlock x:Name="LightSpeedTextBlock" />
+                            <ColorPicker x:Name="LightEffectColorPicker" />
+                            <RadioButton x:Name="LeftToRightRadioButton" />
+                            <RadioButton x:Name="RightToLeftRadioButton" />
+                            <Button x:Name="LightingEffectsApplyButton" />
+                            <ComboBox x:Name="JmaPresetComboBox" />
+                            <Button x:Name="ApplyJmaPresetButton" />
+                        </StackPanel>
+
+                        <!-- ============================================================ -->
+                        <!-- 1. SUB-PAGE: GLOBAL LIGHTING CONTROL                        -->
+                        <!-- ============================================================ -->
+                        <Grid Grid.Row="2" ColumnDefinitions="365,*" Margin="10,0,10,10"
+                              IsVisible="{Binding ElementName=RgbTabGlobalBtn, Path=IsChecked}">
+
+                            <!-- Left: Select Effect Grid -->
+                            <Border Grid.Column="0" Classes="Card" Margin="0 0 8 0" Padding="14">
+                                <Grid RowDefinitions="Auto,*">
+                                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0 0 0 10">
+                                        <TextBlock Text="Select Effect" Classes="SubHeader" Margin="0" VerticalAlignment="Center"/>
+                                        <Border Background="#0b0e16" BorderBrush="#181e2b" BorderThickness="1" CornerRadius="8" Padding="8 3">
+                                            <TextBlock Text="17 Effects" FontSize="11" Foreground="#64748b" Margin="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- 2-Column Effect Grid -->
+                                    <ScrollViewer Grid.Row="1">
+                                        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <!-- Static Mode -->
+                                            <RadioButton Classes="EffectCard" Tag="static" IsChecked="True" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="CubeOutline" Width="18" Height="18" Foreground="#00f0ff"/>
+                                                    <TextBlock Text="Static" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Breathing -->
+                                            <RadioButton Classes="EffectCard" Tag="hw_breathing" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="HeartPulse" Width="18" Height="18" Foreground="#ff2a55"/>
+                                                    <TextBlock Text="Breathing" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Wave -->
+                                            <RadioButton Classes="EffectCard" Tag="hw_wave" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="Waves" Width="18" Height="18" Foreground="#00d4ff"/>
+                                                    <TextBlock Text="Wave" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Shifting / Snake -->
+                                            <RadioButton Classes="EffectCard" Tag="hw_shifting" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="ArrowLeftRight" Width="18" Height="18" Foreground="#00ff9d"/>
+                                                    <TextBlock Text="Shifting" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Zoom / Ripple -->
+                                            <RadioButton Classes="EffectCard" Tag="hw_zoom" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="MagnifyPlusOutline" Width="18" Height="18" Foreground="#38bdf8"/>
+                                                    <TextBlock Text="Zoom Ripple" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Neon -->
+                                            <RadioButton Classes="EffectCard" Tag="hw_neon" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="Flare" Width="18" Height="18" Foreground="#f59e0b"/>
+                                                    <TextBlock Text="Neon Glow" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Meteor Storm -->
+                                            <RadioButton Classes="EffectCard" Tag="hw_meteor" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="WeatherSunny" Width="18" Height="18" Foreground="#fb923c"/>
+                                                    <TextBlock Text="Meteor Storm" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Starry Twinkle -->
+                                            <RadioButton Classes="EffectCard" Tag="hw_twinkling" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="Creation" Width="18" Height="18" Foreground="#ffd700"/>
+                                                    <TextBlock Text="Star Twinkle" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- CPU Temp Heatmap -->
+                                            <RadioButton Classes="EffectCard" Tag="sw_cpu_heatmap" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="ThermometerAlert" Width="18" Height="18" Foreground="#ef4444"/>
+                                                    <TextBlock Text="CPU Heatmap" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Fire & Ember -->
+                                            <RadioButton Classes="EffectCard" Tag="sw_fire_ember" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="Fire" Width="18" Height="18" Foreground="#f97316"/>
+                                                    <TextBlock Text="Fire &amp; Ember" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Police Strobe -->
+                                            <RadioButton Classes="EffectCard" Tag="sw_police_strobe" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="PoliceBadge" Width="18" Height="18" Foreground="#3b82f6"/>
+                                                    <TextBlock Text="Police Strobe" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Matrix Cyber Rain -->
+                                            <RadioButton Classes="EffectCard" Tag="sw_matrix_rain" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="CodeBraces" Width="18" Height="18" Foreground="#22c55e"/>
+                                                    <TextBlock Text="Matrix Rain" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Knight Rider -->
+                                            <RadioButton Classes="EffectCard" Tag="sw_cylon_scanner" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="EyeOutline" Width="18" Height="18" Foreground="#e11d48"/>
+                                                    <TextBlock Text="Knight Rider" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Cyberpunk Pulse -->
+                                            <RadioButton Classes="EffectCard" Tag="sw_cyberpunk_pulse" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="LightningBolt" Width="18" Height="18" Foreground="#c084fc"/>
+                                                    <TextBlock Text="Cyberpunk" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Rainbow Flow -->
+                                            <RadioButton Classes="EffectCard" Tag="sw_rainbow_flow" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="PaletteOutline" Width="18" Height="18" Foreground="#a855f7"/>
+                                                    <TextBlock Text="Rainbow Flow" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Aurora Drift -->
+                                            <RadioButton Classes="EffectCard" Tag="sw_aurora" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="WeatherDust" Width="18" Height="18" Foreground="#14b8a6"/>
+                                                    <TextBlock Text="Aurora Drift" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Battery Meter -->
+                                            <RadioButton Classes="EffectCard" Tag="sw_battery_fuel" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="BatteryCharging" Width="18" Height="18" Foreground="#10b981"/>
+                                                    <TextBlock Text="Battery Fuel" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+                                        </WrapPanel>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Border>
+
+                            <!-- Right: Color & Effect Settings -->
+                            <Border Grid.Column="1" Classes="Card" Margin="8 0 0 0" Padding="16">
+                                <ScrollViewer>
+                                    <StackPanel Spacing="14">
+                                        <!-- Header Row with Active Mode Status Badge -->
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <TextBlock Text="Color &amp; Effect Settings" Classes="SubHeader" Margin="0" VerticalAlignment="Center"/>
+                                            <Border Grid.Column="1" Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="12" Padding="12 4">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <Border x:Name="ActiveModeDot" Width="8" Height="8" CornerRadius="4" Background="#00ff9d"/>
+                                                    <TextBlock x:Name="ActiveModeStatusText" Text="Static Global Mode" FontSize="11" FontWeight="SemiBold" Foreground="#eff9ff" Margin="0"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+
+                                        <!-- Realistic Keyboard Visualizer Live Mirror in Global Tab -->
+                                        <Border x:Name="KeyboardChassisGlobal" Background="#06080d" BorderBrush="#141c2b" BorderThickness="1.5" CornerRadius="12" Padding="12 10">
+                                            <StackPanel Spacing="3">
+                                                <!-- ROW 1: Function Row (Height 26) -->
+                                                <Grid Height="26" ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Esc"/></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F1"/></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F2"/></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F3"/></Panel></Border>
+                                                    <Border Grid.Column="4" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F4"/></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F5"/></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F6"/></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F7"/></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F8"/></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F9"/></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F10"/></Panel></Border>
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F11"/></Panel></Border>
+                                                    <Border Grid.Column="12" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F12"/></Panel></Border>
+                                                    <Border Grid.Column="13" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="PrtSc" FontSize="8"/></Panel></Border>
+                                                    <Border Grid.Column="14" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Ins" FontSize="8.5"/></Panel></Border>
+                                                    <Border Grid.Column="15" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Del" FontSize="8.5"/></Panel></Border>
+                                                    <Border Grid.Column="16" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="SkipPrevious" Width="13" Height="13"/></Panel></Border>
+                                                    <Border Grid.Column="17" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="PlayPause" Width="13" Height="13"/></Panel></Border>
+                                                    <Border Grid.Column="18" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="SkipNext" Width="13" Height="13"/></Panel></Border>
+                                                    <Border Grid.Column="19" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="Power" Width="13" Height="13"/></Panel></Border>
+                                                </Grid>
+
+                                                <!-- ROW 2: Number Row (Height 28) -->
+                                                <Grid Height="28" ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,2.4*,1.6*,1*,1*,1*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="~"/></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="1"/></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="2"/></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="3"/></Panel></Border>
+                                                    <Border Grid.Column="4" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="4"/></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="5"/></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="6"/></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="7"/></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="8"/></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="9"/></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="0"/></Panel></Border>
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="-"/></Panel></Border>
+                                                    <Border Grid.Column="12" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="+"/></Panel></Border>
+                                                    <Border Grid.Column="13" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="BackspaceOutline" Width="14" Height="14"/></Panel></Border>
+                                                    <!-- Predator Key -->
+                                                    <Border Grid.Column="14" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><Image Source="predator_emblem_cyan.png" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/></Panel></Border>
+                                                    <Border Grid.Column="15" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="NumLk" FontSize="8"/></Panel></Border>
+                                                    <Border Grid.Column="16" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="/"/></Panel></Border>
+                                                    <Border Grid.Column="17" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="*"/></Panel></Border>
+                                                </Grid>
+
+                                                <!-- ROW 3: QWERTY Row (Height 28) -->
+                                                <Grid Height="28" ColumnDefinitions="1.6*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1.4*,1.25*,1.25*,1.25*,1.25*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="KeyboardTab" Width="13" Height="13"/></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Q"/></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey KeyWasd" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" FontWeight="Bold" Text="W"/></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="E"/></Panel></Border>
+                                                    <Border Grid.Column="4" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="R"/></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="T"/></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Y"/></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="U"/></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="I"/></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="O"/></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="P"/></Panel></Border>
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel">{</TextBlock></Panel></Border>
+                                                    <Border Grid.Column="12" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel">}</TextBlock></Panel></Border>
+                                                    <Border Grid.Column="13" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="|"/></Panel></Border>
+                                                    <Border Grid.Column="14" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="7"/></Panel></Border>
+                                                    <Border Grid.Column="15" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="8"/></Panel></Border>
+                                                    <Border Grid.Column="16" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="9"/></Panel></Border>
+                                                    <Border Grid.Column="17" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="-"/></Panel></Border>
+                                                </Grid>
+
+                                                <!-- ROW 4: Home Row (Height 28) -->
+                                                <Grid Height="28" ColumnDefinitions="1.9*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,2.1*,1.25*,1.25*,1.25*,1.25*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="CapsLock" FontSize="8.5"/></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey KeyWasd" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" FontWeight="Bold" Text="A"/></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey KeyWasd" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" FontWeight="Bold" Text="S"/></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey KeyWasd" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" FontWeight="Bold" Text="D"/></Panel></Border>
+                                                    <Border Grid.Column="4" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F"/></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="G"/></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="H"/></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="J"/></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="K"/></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="L"/></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text=":"/></Panel></Border>
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="&quot;"/></Panel></Border>
+                                                    <Border Grid.Column="12" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="KeyboardReturn" Width="14" Height="14"/></Panel></Border>
+                                                    <Border Grid.Column="13" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="4"/></Panel></Border>
+                                                    <Border Grid.Column="14" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="5"/></Panel></Border>
+                                                    <Border Grid.Column="15" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="6"/></Panel></Border>
+                                                    <Border Grid.Column="16" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="+"/></Panel></Border>
+                                                </Grid>
+
+                                                <!-- ROW 5: Shift, Arrow & Numpad Row (Height 28) -->
+                                                <Grid Height="28" ColumnDefinitions="2.4*,1*,1*,1*,1*,1*,1*,1*,1*,1*,2.6*,1*,1.25*,1.25*,1.25*,1.25*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="⇧ Shift" FontSize="8.5"/></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Z"/></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="X"/></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="C"/></Panel></Border>
+                                                    <Border Grid.Column="4" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="V"/></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="B"/></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="N"/></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="M"/></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="&lt;"/></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="&gt;"/></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="⇧" FontSize="9"/></Panel></Border>
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="ArrowUpBold" Width="13" Height="13"/></Panel></Border>
+                                                    <Border Grid.Column="12" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="1"/></Panel></Border>
+                                                    <Border Grid.Column="13" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="2"/></Panel></Border>
+                                                    <Border Grid.Column="14" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="3"/></Panel></Border>
+                                                    <!-- Tall Enter key spanning into Row 6 -->
+                                                    <Border Grid.Column="15" Classes="PSKey" Tag="z4" Height="58" VerticalAlignment="Top" ZIndex="20" Margin="1.5,1.5,1.5,-29" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Enter" FontSize="8.5"/></Panel></Border>
+                                                </Grid>
+
+                                                <!-- ROW 6: Bottom Row (Height 28) -->
+                                                <Grid Height="28" ColumnDefinitions="1.4*,1.1*,1.1*,1.2*,5*,1.2*,1*,1*,1*,1*,1*,2.5*,1.25*,1.25*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Ctrl"/></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Fn"/></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="MicrosoftWindows" Width="13" Height="13"/></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Alt"/></Panel></Border>
+                                                    <!-- Spacebar -->
+                                                    <Border x:Name="SpaceKeyGlobal" Grid.Column="4" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="SPACE" Opacity="0.4" FontSize="8.5"/></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="AltGr"/></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="Menu" Width="13" Height="13"/></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Ctrl"/></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="ArrowLeftBold" Width="13" Height="13"/></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="ArrowDownBold" Width="13" Height="13"/></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="ArrowRightBold" Width="13" Height="13"/></Panel></Border>
+                                                    <!-- Numpad 0 & . -->
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="0"/></Panel></Border>
+                                                    <Border Grid.Column="12" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="."/></Panel></Border>
+                                                    <Border Grid.Column="13" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="KeyboardReturn" Width="14" Height="14"/></Panel></Border>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- Live Effect Description Banner -->
+                                        <Border CornerRadius="8" Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" Padding="12">
+                                            <Grid ColumnDefinitions="Auto,*">
+                                                <material:MaterialIcon x:Name="DynamicEffectIcon" Kind="CubeOutline" Width="24" Height="24" Foreground="#00f0ff" Margin="0 0 12 0" VerticalAlignment="Center"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                    <TextBlock x:Name="DynamicEffectTitleText" Text="Static Global Mode • Hardware Color" FontWeight="Bold" FontSize="13" Foreground="#eff9ff" Margin="0"/>
+                                                    <TextBlock x:Name="DynamicEffectDescText" Text="Applies a single uniform solid color across all 4 keyboard zones simultaneously." FontSize="11" Opacity="0.75" TextWrapping="Wrap" Margin="0 3 0 0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Color Picker & Quick Swatches Card -->
+                                        <Border CornerRadius="10" Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" Padding="14">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock x:Name="DynamicColorLabel" Text="Color Selection" Classes="SubHeader" Margin="0" FontSize="13"/>
+                                                
+                                                <Grid ColumnDefinitions="Auto,*" Margin="0 4 0 0">
+                                                    <!-- Color Picker Wheel -->
+                                                    <ColorPicker x:Name="DynamicEffectColorPicker"
+                                                                 IsAlphaEnabled="False"
+                                                                 HexInputAlphaPosition="Trailing"
+                                                                 Color="#00f0ff"
+                                                                 VerticalAlignment="Center"
+                                                                 HorizontalAlignment="Left"
+                                                                 Height="52"
+                                                                 Width="230"/>
+
+                                                    <!-- Quick Color Swatches -->
+                                                    <StackPanel Grid.Column="1" Margin="16 0 0 0" VerticalAlignment="Center" Spacing="6">
+                                                        <TextBlock Text="Quick Preset Colors:" FontSize="11" Foreground="#94a3b8" Margin="0"/>
+                                                        <WrapPanel>
+                                                            <Button Classes="ColorSwatch" Background="#00F0FF" Tag="#00F0FF" ToolTip.Tip="Predator Cyan" Click="QuickSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#00FF9D" Tag="#00FF9D" ToolTip.Tip="Neon Mint" Click="QuickSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#38BDF8" Tag="#38BDF8" ToolTip.Tip="Ice Sky" Click="QuickSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#F59E0B" Tag="#F59E0B" ToolTip.Tip="Amber Gold" Click="QuickSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#FF2A55" Tag="#FF2A55" ToolTip.Tip="Predator Red" Click="QuickSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#C084FC" Tag="#C084FC" ToolTip.Tip="Cyber Purple" Click="QuickSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#FF007F" Tag="#FF007F" ToolTip.Tip="Hot Pink" Click="QuickSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#FFFFFF" Tag="#FFFFFF" ToolTip.Tip="Pure White" Click="QuickSwatch_Click"/>
+                                                        </WrapPanel>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- Speed & Direction Parameter Controls -->
+                                        <Border CornerRadius="10" Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" Padding="14">
+                                            <StackPanel Spacing="12">
+                                                <!-- Speed Slider -->
+                                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                                    <TextBlock Text="Effect Speed:" FontWeight="SemiBold" VerticalAlignment="Center" Width="100" Margin="0" />
+                                                    <Slider x:Name="DynamicSpeedSlider" Grid.Column="1" Value="5"
+                                                            Maximum="9" Minimum="0" IsSnapToTickEnabled="True" TickFrequency="1" Margin="10 0" VerticalAlignment="Center" />
+                                                    <TextBlock x:Name="DynamicSpeedText" Grid.Column="2" Text="5"
+                                                               Width="30" TextAlignment="Right" FontWeight="Bold" Foreground="#00f0ff" VerticalAlignment="Center" Margin="0" />
+                                                </Grid>
+
+                                                <!-- Direction Selector -->
+                                                <Grid ColumnDefinitions="Auto,*">
+                                                    <TextBlock x:Name="DynamicDirectionLabel" Text="Direction:" FontWeight="SemiBold"
+                                                               VerticalAlignment="Center" Width="100" Margin="0" />
+                                                    <StackPanel x:Name="DynamicDirectionPanel" Grid.Column="1" Orientation="Horizontal" Margin="10 0 0 0" Spacing="10">
+                                                        <RadioButton x:Name="DirLeftToRightButton" Classes="Compact" GroupName="DynamicDirectionGroup" IsChecked="True">
+                                                            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="0">
+                                                                <material:MaterialIcon Kind="ArrowRight" Width="16" Height="16" VerticalAlignment="Center" />
+                                                                <TextBlock Text="Z1 → Z4 (Left to Right)" FontSize="11" VerticalAlignment="Center" Margin="0" />
+                                                            </StackPanel>
+                                                        </RadioButton>
+                                                        <RadioButton x:Name="DirRightToLeftButton" Classes="Compact" GroupName="DynamicDirectionGroup">
+                                                            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="0">
+                                                                <material:MaterialIcon Kind="ArrowLeft" Width="16" Height="16" VerticalAlignment="Center" />
+                                                                <TextBlock Text="Z4 → Z1 (Right to Left)" FontSize="11" VerticalAlignment="Center" Margin="0" />
+                                                            </StackPanel>
+                                                        </RadioButton>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- Action Buttons Row -->
+                                        <WrapPanel Orientation="Horizontal" Margin="0 6 0 0">
+                                            <Button x:Name="PlayDynamicEffectButton" Classes="PlayEffectBtn" Margin="0 0 10 0">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="PlayCircle" Width="18" Height="18" Foreground="{Binding $parent[Button].Foreground}" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="Play Effect" Foreground="{Binding $parent[Button].Foreground}" FontWeight="Bold" VerticalAlignment="Center" Margin="0"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button x:Name="StopDynamicEffectButton" Classes="StopEffectBtn" Margin="0 0 10 0">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="StopCircleOutline" Width="18" Height="18" Foreground="{Binding $parent[Button].Foreground}" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="Stop Effect" Foreground="{Binding $parent[Button].Foreground}" FontWeight="Bold" VerticalAlignment="Center" Margin="0"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button x:Name="ApplyGlobalColorButton" Content="Apply Global Color" Margin="0"/>
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+
+                        <!-- ============================================================ -->
+                        <!-- 2. SUB-PAGE: AREA (4-ZONE) LIGHTING                         -->
+                        <!-- ============================================================ -->
+                        <Grid Grid.Row="2" ColumnDefinitions="365,*" Margin="10,0,10,10"
+                              IsVisible="{Binding ElementName=RgbTabAreaBtn, Path=IsChecked}">
+
+                            <!-- Left: Select Preset / Theme Grid -->
+                            <Border Grid.Column="0" Classes="Card" Margin="0 0 8 0" Padding="14">
+                                <Grid RowDefinitions="Auto,*">
+                                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0 0 0 10">
+                                        <TextBlock Text="Area Themes &amp; Presets" Classes="SubHeader" Margin="0" VerticalAlignment="Center"/>
+                                        <Border Background="#0b0e16" BorderBrush="#181e2b" BorderThickness="1" CornerRadius="8" Padding="8 3">
+                                            <TextBlock Text="15 Themes" FontSize="11" Foreground="#64748b" Margin="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- 2-Column Theme Cards Grid -->
+                                    <ScrollViewer Grid.Row="1">
+                                        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <!-- Custom Mode -->
+                                            <RadioButton Classes="EffectCard" Tag="custom" IsChecked="True" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="PaletteOutline" Width="18" Height="18" Foreground="#00f0ff"/>
+                                                    <TextBlock Text="Custom 4-Zone" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Cyberpunk 2077 -->
+                                            <RadioButton Classes="EffectCard" Tag="cyberpunk" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="Flash" Width="18" Height="18" Foreground="#00f0ff"/>
+                                                    <TextBlock Text="Cyberpunk" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Matrix Hacker -->
+                                            <RadioButton Classes="EffectCard" Tag="matrix" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="CodeTags" Width="18" Height="18" Foreground="#00ff9d"/>
+                                                    <TextBlock Text="Matrix" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Vaporwave -->
+                                            <RadioButton Classes="EffectCard" Tag="vaporwave" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="WeatherSunset" Width="18" Height="18" Foreground="#ff007f"/>
+                                                    <TextBlock Text="Vaporwave" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Fire & Ice -->
+                                            <RadioButton Classes="EffectCard" Tag="fire_ice" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="Fire" Width="18" Height="18" Foreground="#f59e0b"/>
+                                                    <TextBlock Text="Fire &amp; Ice" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Sunset Horizon -->
+                                            <RadioButton Classes="EffectCard" Tag="sunset" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="WeatherSunsetDown" Width="18" Height="18" Foreground="#ff5733"/>
+                                                    <TextBlock Text="Sunset" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Predator Teal -->
+                                            <RadioButton Classes="EffectCard" Tag="predator_teal" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="ShieldOutline" Width="18" Height="18" Foreground="#00f0ff"/>
+                                                    <TextBlock Text="Predator Teal" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Toxic Acid -->
+                                            <RadioButton Classes="EffectCard" Tag="toxic_acid" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="Biohazard" Width="18" Height="18" Foreground="#39ff14"/>
+                                                    <TextBlock Text="Toxic Acid" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Blood Moon -->
+                                            <RadioButton Classes="EffectCard" Tag="blood_moon" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="MoonWaningCrescent" Width="18" Height="18" Foreground="#ff2a55"/>
+                                                    <TextBlock Text="Blood Moon" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Arctic Frost -->
+                                            <RadioButton Classes="EffectCard" Tag="arctic_frost" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="Snowflake" Width="18" Height="18" Foreground="#ffffff"/>
+                                                    <TextBlock Text="Arctic Frost" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Rainbow -->
+                                            <RadioButton Classes="EffectCard" Tag="rainbow" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="PaletteAdvanced" Width="18" Height="18" Foreground="#38bdf8"/>
+                                                    <TextBlock Text="Rainbow" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Deep Purple -->
+                                            <RadioButton Classes="EffectCard" Tag="deep_purple" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="AutoFix" Width="18" Height="18" Foreground="#c084fc"/>
+                                                    <TextBlock Text="Deep Purple" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Golden Dragon -->
+                                            <RadioButton Classes="EffectCard" Tag="golden_dragon" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="CrownOutline" Width="18" Height="18" Foreground="#f59e0b"/>
+                                                    <TextBlock Text="Gold Dragon" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Gradient Flow -->
+                                            <RadioButton Classes="EffectCard" Tag="gradient_flow" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="GradientHorizontal" Width="18" Height="18" Foreground="#00ff9d"/>
+                                                    <TextBlock Text="Gradient Z1→Z4" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Mirror Symmetry -->
+                                            <RadioButton Classes="EffectCard" Tag="mirror_sym" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="FlipHorizontal" Width="18" Height="18" Foreground="#ff2a55"/>
+                                                    <TextBlock Text="Mirror Symmetry" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+                                        </WrapPanel>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Border>
+
+                            <!-- Right: Realistic Predator Keyboard Visualizer & Zone Controls -->
+                            <Border Grid.Column="1" Classes="Card" Margin="8 0 0 0" Padding="14">
+                                <ScrollViewer>
+                                    <StackPanel Spacing="14">
+                                        <!-- Header, Zone Selector & Hardware Apply -->
+                                        <Grid ColumnDefinitions="Auto,Auto,*,Auto" VerticalAlignment="Center">
+                                            <!-- Zone Selector Dropdown matching official PredatorSense -->
+                                            <ComboBox Grid.Column="0" x:Name="SelectZoneComboBox" SelectedIndex="4" Width="210" VerticalAlignment="Center" SelectionChanged="SelectZoneComboBox_SelectionChanged">
+                                                <ComboBoxItem Content="All Zones (Unified)"/>
+                                                <ComboBoxItem Content="Zone 1 (WASD)"/>
+                                                <ComboBoxItem Content="Zone 2 (Center)"/>
+                                                <ComboBoxItem Content="Zone 3 (Nav &amp; Arrows)"/>
+                                                <ComboBoxItem Content="Zone 4 (Numpad)"/>
+                                            </ComboBox>
+
+                                            <!-- Zone Info Button -->
+                                            <Button Grid.Column="1" x:Name="ZoneInfoBtn" Classes="IconButton" ToolTip.Tip="Predator Helios 4-Zone RGB: Click any key to select its zone and customize lighting colors." Width="34" Height="34" Padding="0" Margin="8 0 0 0" VerticalAlignment="Center" Click="ZoneInfoBtn_Click">
+                                                <material:MaterialIcon Kind="InformationOutline" Width="18" Height="18" Foreground="#64748b"/>
+                                            </Button>
+
+                                            <!-- Subtle interactive hint in center -->
+                                            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <material:MaterialIcon Kind="GestureTap" Width="16" Height="16" Foreground="#64748b"/>
+                                                <TextBlock Text="Click any keycap to switch to that zone" FontSize="11" Foreground="#64748b" VerticalAlignment="Center"/>
+                                            </StackPanel>
+
+                                            <!-- Auto-Apply Checkbox -->
+                                            <CheckBox Grid.Column="3" x:Name="InstantApplyCheckBox" Content="Auto-apply to hardware" IsChecked="True" VerticalAlignment="Center"/>
+                                        </Grid>
+
+                                        <!-- Realistic Unified Keyboard Chassis Visualizer -->
+                                        <Border x:Name="KeyboardChassis" Background="#06080d" BorderBrush="#141c2b" BorderThickness="1.5" CornerRadius="12" Padding="12 10">
+                                            <StackPanel Spacing="3">
+                                                <!-- ROW 1: Function Row (Height 26) -->
+                                                <Grid Height="26" ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Esc"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F1"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F2"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F3"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="4" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F4"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F5"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F6"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F7"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F8"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F9"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F10"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F11"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="12" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F12"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="13" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="PrtSc" FontSize="8"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="14" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Ins" FontSize="8.5"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="15" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Del" FontSize="8.5"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="16" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="SkipPrevious" Width="13" Height="13"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="17" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="PlayPause" Width="13" Height="13"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="18" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="SkipNext" Width="13" Height="13"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="19" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="Power" Width="13" Height="13"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                </Grid>
+
+                                                <!-- ROW 2: Number Row (Height 28) -->
+                                                <Grid Height="28" ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,2.4*,1.6*,1*,1*,1*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="~"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="1"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="2"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="3"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="4" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="4"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="5"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="6"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="7"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="8"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="9"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="0"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="-"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="12" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="+"/></Panel></Border>
+                                                    <Border Grid.Column="13" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="BackspaceOutline" Width="14" Height="14"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <!-- Predator Key -->
+                                                    <Border Grid.Column="14" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><Image Source="predator_emblem_cyan.png" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="15" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="NumLk" FontSize="8"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="16" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="/"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="17" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="*"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                </Grid>
+
+                                                <!-- ROW 3: QWERTY Row (Height 28) -->
+                                                <Grid Height="28" ColumnDefinitions="1.6*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1.4*,1.25*,1.25*,1.25*,1.25*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="KeyboardTab" Width="13" Height="13"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Q"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey KeyWasd" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" FontWeight="Bold" Text="W"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="E"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="4" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="R"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="T"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Y"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="U"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="I"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="O"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="P"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel">{</TextBlock><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="12" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel">}</TextBlock><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="13" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="|"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="14" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="7"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="15" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="8"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="16" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="9"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="17" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="-"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                </Grid>
+
+                                                <!-- ROW 4: Home Row (Height 28) -->
+                                                <Grid Height="28" ColumnDefinitions="1.9*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,2.1*,1.25*,1.25*,1.25*,1.25*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="CapsLock" FontSize="8.5"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey KeyWasd" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" FontWeight="Bold" Text="A"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey KeyWasd" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" FontWeight="Bold" Text="S"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey KeyWasd" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" FontWeight="Bold" Text="D"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="4" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="F"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="G"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="H"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="J"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="K"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="L"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text=":"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="&quot;"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="12" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="KeyboardReturn" Width="14" Height="14"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="13" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="4"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="14" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="5"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="15" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="6"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="16" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="+"/></Panel></Border>
+                                                </Grid>
+
+                                                <!-- ROW 5: Shift, Arrow & Numpad Row (Height 28) -->
+                                                <Grid Height="28" ColumnDefinitions="2.4*,1*,1*,1*,1*,1*,1*,1*,1*,1*,2.6*,1*,1.25*,1.25*,1.25*,1.25*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="⇧ Shift" FontSize="8.5"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Z"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="X"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="C"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="4" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="V"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="B"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="N"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="M"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="&lt;"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="&gt;"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="⇧" FontSize="9"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="ArrowUpBold" Width="13" Height="13"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <!-- Key 1 on Numpad: Default selected with white border and checkmark badge -->
+                                                    <Border x:Name="KeyNum1" Grid.Column="12" Classes="PSKey SelectedKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="1"/><Border Classes="PSKeyBadge" IsVisible="True"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="13" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="2"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="14" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="3"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <!-- Tall Enter key spanning into Row 6 -->
+                                                    <Border Grid.Column="15" Classes="PSKey" Tag="z4" Height="58" VerticalAlignment="Top" ZIndex="20" Margin="1.5,1.5,1.5,-29" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Enter" FontSize="8.5"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                </Grid>
+
+                                                <!-- ROW 6: Bottom Row (Height 28) -->
+                                                <Grid Height="28" ColumnDefinitions="1.4*,1.1*,1.1*,1.2*,5*,1.2*,1*,1*,1*,1*,1*,2.5*,1.25*,1.25*">
+                                                    <Border Grid.Column="0" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Ctrl"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="1" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Fn"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="2" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="MicrosoftWindows" Width="13" Height="13"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="3" Classes="PSKey" Tag="z1" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Alt"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <!-- Spacebar -->
+                                                    <Border x:Name="SpaceKey" Grid.Column="4" Classes="PSKey" Tag="z2" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="SPACE" Opacity="0.4" FontSize="8.5"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="5" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="AltGr"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="6" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="Menu" Width="13" Height="13"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="7" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="Ctrl"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="8" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="ArrowLeftBold" Width="13" Height="13"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="9" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="ArrowDownBold" Width="13" Height="13"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="10" Classes="PSKey" Tag="z3" PointerPressed="KeyCap_PointerPressed"><Panel><material:MaterialIcon Kind="ArrowRightBold" Width="13" Height="13"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <!-- Numpad 0 & . -->
+                                                    <Border Grid.Column="11" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="0"/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <Border Grid.Column="12" Classes="PSKey" Tag="z4" PointerPressed="KeyCap_PointerPressed"><Panel><TextBlock Classes="PSKeyLabel" Text="."/><Border Classes="PSKeyBadge" IsVisible="False"><material:MaterialIcon Kind="Check" Width="7" Height="7" Foreground="#005577"/></Border></Panel></Border>
+                                                    <!-- Spacer for Tall Enter extension -->
+                                                    <Border Grid.Column="13" Background="Transparent" Margin="1.5"/>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- 4-Zone Individual Color Pickers Row -->
+                                        <Border CornerRadius="10" Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" Padding="14">
+                                            <StackPanel Spacing="10">
+                                                <Grid ColumnDefinitions="*,Auto" Margin="0 0 0 2">
+                                                    <TextBlock Grid.Column="0" Text="Individual Zone Color Selectors" Classes="SubHeader" Margin="0" FontSize="13" VerticalAlignment="Center"/>
+                                                    <TextBlock Grid.Column="1" x:Name="ActiveZoneHintText" Text="Active: Zone 4 (Numpad)" FontSize="11" Foreground="#00f0ff" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </Grid>
+                                                
+                                                <Grid ColumnDefinitions="*,*,*,*">
+                                                    <!-- Zone 1 -->
+                                                    <Border x:Name="Zone1Card" Grid.Column="0" Background="#0e131d" BorderBrush="#1e293b" BorderThickness="1.5" CornerRadius="8" Padding="10 8" Margin="0 0 6 0">
+                                                        <StackPanel Spacing="6">
+                                                            <Grid ColumnDefinitions="*,Auto">
+                                                                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                                                    <material:MaterialIcon Kind="KeyboardOutline" Width="14" Height="14" Foreground="#00f0ff"/>
+                                                                    <TextBlock Text="Zone 1 (WASD)" FontSize="11" FontWeight="Bold" Foreground="#eff6ff"/>
+                                                                </StackPanel>
+                                                                <Border x:Name="Zone1Indicator" Grid.Column="1" Width="8" Height="8" CornerRadius="4" Background="#00A3C4"/>
+                                                            </Grid>
+                                                            <ColorPicker x:Name="Zone1ColorPicker" IsAlphaEnabled="False" HexInputAlphaPosition="Trailing" Color="#00A3C4" Height="40" HorizontalAlignment="Stretch"/>
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                    <!-- Zone 2 -->
+                                                    <Border x:Name="Zone2Card" Grid.Column="1" Background="#0e131d" BorderBrush="#1e293b" BorderThickness="1.5" CornerRadius="8" Padding="10 8" Margin="3 0 3 0">
+                                                        <StackPanel Spacing="6">
+                                                            <Grid ColumnDefinitions="*,Auto">
+                                                                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                                                    <material:MaterialIcon Kind="KeyboardOutline" Width="14" Height="14" Foreground="#ff5733"/>
+                                                                    <TextBlock Text="Zone 2 (Center)" FontSize="11" FontWeight="Bold" Foreground="#eff6ff"/>
+                                                                </StackPanel>
+                                                                <Border x:Name="Zone2Indicator" Grid.Column="1" Width="8" Height="8" CornerRadius="4" Background="#00A3C4"/>
+                                                            </Grid>
+                                                            <ColorPicker x:Name="Zone2ColorPicker" IsAlphaEnabled="False" HexInputAlphaPosition="Trailing" Color="#00A3C4" Height="40" HorizontalAlignment="Stretch"/>
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                    <!-- Zone 3 -->
+                                                    <Border x:Name="Zone3Card" Grid.Column="2" Background="#0e131d" BorderBrush="#1e293b" BorderThickness="1.5" CornerRadius="8" Padding="10 8" Margin="3 0 3 0">
+                                                        <StackPanel Spacing="6">
+                                                            <Grid ColumnDefinitions="*,Auto">
+                                                                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                                                    <material:MaterialIcon Kind="KeyboardOutline" Width="14" Height="14" Foreground="#33ff57"/>
+                                                                    <TextBlock Text="Zone 3 (Nav &amp; Arrows)" FontSize="11" FontWeight="Bold" Foreground="#eff6ff"/>
+                                                                </StackPanel>
+                                                                <Border x:Name="Zone3Indicator" Grid.Column="1" Width="8" Height="8" CornerRadius="4" Background="#00A3C4"/>
+                                                            </Grid>
+                                                            <ColorPicker x:Name="Zone3ColorPicker" IsAlphaEnabled="False" HexInputAlphaPosition="Trailing" Color="#00A3C4" Height="40" HorizontalAlignment="Stretch"/>
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                    <!-- Zone 4 -->
+                                                    <Border x:Name="Zone4Card" Grid.Column="3" Background="#0e131d" BorderBrush="#00f0ff" BorderThickness="1.5" CornerRadius="8" Padding="10 8" Margin="6 0 0 0">
+                                                        <StackPanel Spacing="6">
+                                                            <Grid ColumnDefinitions="*,Auto">
+                                                                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                                                    <material:MaterialIcon Kind="KeyboardOutline" Width="14" Height="14" Foreground="#00f0ff"/>
+                                                                    <TextBlock Text="Zone 4 (Numpad)" FontSize="11" FontWeight="Bold" Foreground="#eff6ff"/>
+                                                                </StackPanel>
+                                                                <Border x:Name="Zone4Indicator" Grid.Column="1" Width="8" Height="8" CornerRadius="4" Background="#00A3C4"/>
+                                                            </Grid>
+                                                            <ColorPicker x:Name="Zone4ColorPicker" IsAlphaEnabled="False" HexInputAlphaPosition="Trailing" Color="#00A3C4" Height="40" HorizontalAlignment="Stretch"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- Actions Row -->
+                                        <WrapPanel Orientation="Horizontal" Margin="0 2 0 0">
+                                            <Button x:Name="ApplyKeyboardColorsButton" Content="Apply Static Zone Colors" Margin="0 0 8 6"/>
+                                            <Button x:Name="GenerateGradientButton" Content="🎨 Generate Gradient (Z1 → Z4)" Classes="SecondaryButton" Margin="0 0 8 6"/>
+                                            <Button x:Name="SyncAllToZone1Button" Content="🔄 Sync All to Zone 1" Classes="SecondaryButton" Margin="0 0 8 6"/>
+                                            <Button x:Name="SyncBackLogoButton" Content="🛡️ Match Logo to Zone 1" Classes="SecondaryButton" Margin="0 0 8 6"/>
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+
+                        <!-- ============================================================ -->
+                        <!-- 3. SUB-PAGE: LOGO & LID LIGHTBAR                            -->
+                        <!-- ============================================================ -->
+                        <Grid Grid.Row="2" ColumnDefinitions="365,*" Margin="10,0,10,10"
+                              IsVisible="{Binding ElementName=RgbTabLogoBtn, Path=IsChecked}">
+
+                            <!-- Left: Select Logo Effect Grid -->
+                            <Border Grid.Column="0" Classes="Card" Margin="0 0 8 0" Padding="14">
+                                <Grid RowDefinitions="Auto,*">
+                                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0 0 0 10">
+                                        <TextBlock Text="Select Logo Effect" Classes="SubHeader" Margin="0" VerticalAlignment="Center"/>
+                                        <Border Background="#0b0e16" BorderBrush="#181e2b" BorderThickness="1" CornerRadius="8" Padding="8 3">
+                                            <TextBlock Text="9 Effects" FontSize="11" Foreground="#64748b" Margin="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- 2-Column Effect Cards Grid -->
+                                    <ScrollViewer Grid.Row="1">
+                                        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <!-- Static Emblem -->
+                                            <RadioButton Classes="EffectCard" Tag="logo_static" IsChecked="True" GroupName="LogoEffectGroup" Click="LogoEffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="ShieldStarOutline" Width="18" Height="18" Foreground="#00f0ff"/>
+                                                    <TextBlock Text="Static Emblem" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Breathing Pulse -->
+                                            <RadioButton Classes="EffectCard" Tag="logo_breathing" GroupName="LogoEffectGroup" Click="LogoEffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="HeartPulse" Width="18" Height="18" Foreground="#ff2a55"/>
+                                                    <TextBlock Text="Breathing" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Chroma Loop -->
+                                            <RadioButton Classes="EffectCard" Tag="logo_rainbow" GroupName="LogoEffectGroup" Click="LogoEffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="PaletteOutline" Width="18" Height="18" Foreground="#00ff9d"/>
+                                                    <TextBlock Text="Chroma Loop" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Police Interceptor -->
+                                            <RadioButton Classes="EffectCard" Tag="logo_police" GroupName="LogoEffectGroup" Click="LogoEffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="ShieldAlertOutline" Width="18" Height="18" Foreground="#0055ff"/>
+                                                    <TextBlock Text="Police Strobe" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Cyber Neon -->
+                                            <RadioButton Classes="EffectCard" Tag="logo_neon" GroupName="LogoEffectGroup" Click="LogoEffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="WeatherSunny" Width="18" Height="18" Foreground="#ff007f"/>
+                                                    <TextBlock Text="Neon Shift" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Heartbeat -->
+                                            <RadioButton Classes="EffectCard" Tag="logo_heartbeat" GroupName="LogoEffectGroup" Click="LogoEffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="HeartFlash" Width="18" Height="18" Foreground="#ff2a55"/>
+                                                    <TextBlock Text="Heartbeat" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Glitch Strobe -->
+                                            <RadioButton Classes="EffectCard" Tag="logo_strobe" GroupName="LogoEffectGroup" Click="LogoEffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="FlashOutline" Width="18" Height="18" Foreground="#ffffff"/>
+                                                    <TextBlock Text="Glitch Strobe" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- CPU Thermal -->
+                                            <RadioButton Classes="EffectCard" Tag="logo_cpu" GroupName="LogoEffectGroup" Click="LogoEffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="ThermometerAlert" Width="18" Height="18" Foreground="#f59e0b"/>
+                                                    <TextBlock Text="CPU Thermal" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+
+                                            <!-- Tactical Amber -->
+                                            <RadioButton Classes="EffectCard" Tag="logo_stealth" GroupName="LogoEffectGroup" Click="LogoEffectCard_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="EyeOutline" Width="18" Height="18" Foreground="#f59e0b"/>
+                                                    <TextBlock Text="Stealth Amber" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </RadioButton>
+                                        </WrapPanel>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Border>
+
+                            <!-- Right: Color & Effect Settings -->
+                            <Border Grid.Column="1" Classes="Card" Margin="8 0 0 0" Padding="14">
+                                <ScrollViewer>
+                                    <StackPanel Spacing="12">
+                                        <!-- Header & Live Status Badge -->
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                <material:MaterialIcon Kind="ShieldStarOutline" Width="20" Height="20" Foreground="#00f0ff"/>
+                                                <TextBlock Text="Rear Logo &amp; Lightbar Controls" Classes="SubHeader" Margin="0" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            
+                                            <!-- Live Status Badge -->
+                                            <Border Grid.Column="1" HorizontalAlignment="Right" Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="12" Padding="12 4">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <Border x:Name="LogoActiveModeDot" Width="8" Height="8" CornerRadius="4" Background="#00ff9d"/>
+                                                    <TextBlock x:Name="LogoActiveModeStatusText" Text="Static Emblem" FontSize="11" FontWeight="SemiBold" Foreground="#cbd5e1" Margin="0"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+
+                                        <!-- Predator Rear Lid Emblem Visualizer Card -->
+                                        <Border CornerRadius="10" Background="#060912" BorderBrush="#162032" BorderThickness="1.5" Height="140" Margin="0 0 0 2">
+                                            <Panel>
+                                                <!-- Laptop Lid Chassis Texture Background -->
+                                                <Border CornerRadius="9" Opacity="0.6">
+                                                    <Border.Background>
+                                                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                                                            <GradientStop Offset="0" Color="#0a0f1d" />
+                                                            <GradientStop Offset="0.5" Color="#050811" />
+                                                            <GradientStop Offset="1" Color="#080d19" />
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                </Border>
+
+                                                <!-- Centered Authentic Predator Emblem Illuminated Directly (No Circular Disk Background) -->
+                                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+                                                    <Border x:Name="LogoEmblemMask" Width="72" Height="72" Background="#00f0ff" HorizontalAlignment="Center">
+                                                        <Border.OpacityMask>
+                                                            <ImageBrush Source="predator_emblem_white.png" Stretch="Uniform"/>
+                                                        </Border.OpacityMask>
+                                                        <Border.Transitions>
+                                                            <Transitions>
+                                                                <BrushTransition Property="Background" Duration="0:0:0.08" />
+                                                            </Transitions>
+                                                        </Border.Transitions>
+                                                    </Border>
+                                                    <Border Background="#090f1a" BorderBrush="#1c283d" BorderThickness="1" CornerRadius="10" Padding="8 2" HorizontalAlignment="Center">
+                                                        <TextBlock x:Name="LogoEmblemLiveBadge" Text="PREDATOR EMBLEM • #00F0FF" FontSize="10" FontWeight="Bold" Foreground="#00f0ff" Margin="0"/>
+                                                    </Border>
+                                                </StackPanel>
+                                            </Panel>
+                                        </Border>
+
+                                        <!-- Live Effect Description Banner -->
+                                        <Border CornerRadius="8" Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" Padding="12">
+                                            <Grid ColumnDefinitions="Auto,*">
+                                                <material:MaterialIcon x:Name="LogoEffectIcon" Kind="ShieldStarOutline" Width="24" Height="24" Foreground="#00f0ff" Margin="0 0 12 0" VerticalAlignment="Center"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                    <TextBlock x:Name="LogoEffectTitleText" Text="Static Emblem • Hardware Color" FontWeight="Bold" FontSize="13" Foreground="#eff9ff" Margin="0"/>
+                                                    <TextBlock x:Name="LogoEffectDescText" Text="Maintains a steady solid illuminated color on the rear Predator lid emblem." FontSize="11" Opacity="0.75" TextWrapping="Wrap" Margin="0 3 0 0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Color Picker & Quick Swatches Card -->
+                                        <Border CornerRadius="10" Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" Padding="14">
+                                            <StackPanel Spacing="10">
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <TextBlock x:Name="LogoColorLabel" Text="Emblem Color Selection" Classes="SubHeader" Margin="0" FontSize="13"/>
+                                                    <CheckBox x:Name="BackLogoEnabledCheckBox" Content="Enable Rear Logo" IsChecked="True" Grid.Column="1" VerticalAlignment="Center"/>
+                                                </Grid>
+                                                
+                                                <Grid ColumnDefinitions="Auto,*" Margin="0 4 0 0">
+                                                    <!-- Color Picker -->
+                                                    <ColorPicker x:Name="BackLogoColorPicker"
+                                                                 IsAlphaEnabled="False"
+                                                                 HexInputAlphaPosition="Trailing"
+                                                                 Color="#00f0ff"
+                                                                 VerticalAlignment="Center"
+                                                                 HorizontalAlignment="Left"
+                                                                 Height="52"
+                                                                 Width="230"/>
+
+                                                    <!-- Quick Color Swatches -->
+                                                    <StackPanel Grid.Column="1" Margin="16 0 0 0" VerticalAlignment="Center" Spacing="6">
+                                                        <TextBlock Text="Quick Preset Colors:" FontSize="11" Foreground="#94a3b8" Margin="0"/>
+                                                        <WrapPanel>
+                                                            <Button Classes="ColorSwatch" Background="#00F0FF" Tag="#00F0FF" ToolTip.Tip="Predator Cyan" Click="QuickLogoSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#00FF9D" Tag="#00FF9D" ToolTip.Tip="Neon Mint" Click="QuickLogoSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#38BDF8" Tag="#38BDF8" ToolTip.Tip="Ice Sky" Click="QuickLogoSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#F59E0B" Tag="#F59E0B" ToolTip.Tip="Amber Gold" Click="QuickLogoSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#FF2A55" Tag="#FF2A55" ToolTip.Tip="Predator Red" Click="QuickLogoSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#C084FC" Tag="#C084FC" ToolTip.Tip="Cyber Purple" Click="QuickLogoSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#FF007F" Tag="#FF007F" ToolTip.Tip="Hot Pink" Click="QuickLogoSwatch_Click"/>
+                                                            <Button Classes="ColorSwatch" Background="#FFFFFF" Tag="#FFFFFF" ToolTip.Tip="Pure White" Click="QuickLogoSwatch_Click"/>
+                                                        </WrapPanel>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- Speed & Brightness Sliders -->
+                                        <Border CornerRadius="10" Background="#0b0e16" BorderBrush="#1a2233" BorderThickness="1" Padding="14">
+                                            <StackPanel Spacing="12">
+                                                <!-- Effect Speed Slider -->
+                                                <Grid ColumnDefinitions="110,*,50">
+                                                    <TextBlock x:Name="LogoSpeedLabel" Text="Effect Speed:" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold"/>
+                                                    <Slider x:Name="LogoSpeedSlider" Grid.Column="1"
+                                                            Minimum="1" Maximum="10" Value="5"
+                                                            IsSnapToTickEnabled="True" TickFrequency="1"
+                                                            Margin="10 0"/>
+                                                    <TextBlock x:Name="LogoSpeedText" Grid.Column="2" Text="5"
+                                                               VerticalAlignment="Center" HorizontalAlignment="Right"
+                                                               FontWeight="Bold" Foreground="#00f0ff" Margin="0"/>
+                                                </Grid>
+
+                                                <!-- Brightness Slider -->
+                                                <Grid ColumnDefinitions="110,*,50">
+                                                    <TextBlock Text="Logo Brightness:" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold"/>
+                                                    <Slider x:Name="BackLogoBrightnessSlider" Grid.Column="1" Value="100"
+                                                            Maximum="100" Minimum="0" IsSnapToTickEnabled="True" TickFrequency="1" Margin="10 0" />
+                                                    <TextBlock x:Name="BackLogoBrightnessText" Grid.Column="2" Text="100%"
+                                                               VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#00f0ff" Margin="0"/>
+                                                </Grid>
+
+                                                <!-- Effective Output text -->
+                                                <Border Background="#080a0f" BorderBrush="#161c28" BorderThickness="1" CornerRadius="8" Padding="10 6">
+                                                    <TextBlock x:Name="BackLogoEffectiveText" Text="Effective output: RGB #00F0FF, brightness 100%"
+                                                               FontSize="11" Foreground="#94a3b8" Margin="0"/>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- Action Buttons Row -->
+                                        <WrapPanel Orientation="Horizontal" Margin="0 6 0 0">
+                                            <Button x:Name="PlayLogoEffectButton" Classes="PlayEffectBtn" Margin="0 0 10 0" Click="PlayLogoEffectButton_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="PlayCircle" Width="18" Height="18" Foreground="{Binding $parent[Button].Foreground}" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="Play Logo Effect" Foreground="{Binding $parent[Button].Foreground}" FontWeight="Bold" VerticalAlignment="Center" Margin="0"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button x:Name="StopLogoEffectButton" Classes="StopEffectBtn" Margin="0 0 10 0" Click="StopLogoEffectButton_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                    <material:MaterialIcon Kind="StopCircleOutline" Width="18" Height="18" Foreground="{Binding $parent[Button].Foreground}" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="Stop Logo Effect" Foreground="{Binding $parent[Button].Foreground}" FontWeight="Bold" VerticalAlignment="Center" Margin="0"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button x:Name="ApplyBackLogoButton" Content="Apply Static Logo" Margin="0 0 10 0"/>
+                                            <Button Content="🛡️ Match to Keyboard Zone 1" Classes="SecondaryButton" Click="SyncBackLogoButton_Click" Margin="0"/>
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+
+                        <!-- ============================================================ -->
+                        <!-- 4. SUB-PAGE: WALLPAPER PALETTE FX                           -->
+                        <!-- ============================================================ -->
+                        <ScrollViewer Grid.Row="2" Margin="10,0,10,10"
+                                      IsVisible="{Binding ElementName=RgbTabWallpaperBtn, Path=IsChecked}">
+                            <Border Classes="Card" x:Name="WallpaperPalettePanel" Padding="18">
+                                <StackPanel Spacing="14">
+                                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                        <material:MaterialIcon Kind="ImageMultipleOutline" Width="22" Height="22" Foreground="#00f0ff"/>
+                                        <TextBlock Text="Wallpaper Color Palette &amp; Ambient Lighting" Classes="SubHeader" Margin="0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="Extract dominant colors from your active desktop wallpaper or custom wallpaper image to automatically sync with your keyboard lighting."
+                                               Opacity="0.75" FontSize="12" TextWrapping="Wrap" Margin="0"/>
+
+                                    <WrapPanel Margin="0 4 0 0">
+                                        <Button x:Name="ReadWallpaperButton" Content="Use Current Wallpaper" Margin="0 0 10 6" />
+                                        <Button x:Name="ChooseWallpaperImageButton" Content="Choose Image…" Classes="SecondaryButton" Margin="0 0 0 6" />
+                                    </WrapPanel>
+
+                                    <Image x:Name="WallpaperPreview" Height="120" Width="260"
+                                           HorizontalAlignment="Left" Stretch="UniformToFill" IsVisible="False" />
+                                    
+                                    <TextBlock x:Name="WallpaperSourceText" Opacity="0.7" FontSize="11" TextWrapping="Wrap" Margin="0"/>
+                                    <TextBlock x:Name="WallpaperPaletteStatus" Text="Read your wallpaper or choose an image." FontSize="12" Foreground="#94a3b8" TextWrapping="Wrap" Margin="0"/>
+                                    
+                                    <WrapPanel x:Name="WallpaperColorSwatches" Margin="0 4 0 0"/>
+
+                                    <Grid ColumnDefinitions="Auto,*" Margin="0 6 0 0">
+                                        <ComboBox x:Name="WallpaperLightingTarget" Width="220" Margin="0 0 12 0"
+                                                  PlaceholderText="Apply color to…"/>
+                                        <Button x:Name="ApplyWallpaperColorButton" Content="Apply Static Color"
+                                                IsEnabled="False" Grid.Column="1" HorizontalAlignment="Left" Margin="0"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </ScrollViewer>
+                    </Grid>
+                </TabItem>
+
+                <!-- System Settings Tab -->
+                <TabItem x:Name="SystemSettingsPanel">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                            <material:MaterialIcon Kind="Tune" Width="18" Height="18" Foreground="#38bdf8"/>
+                            <TextBlock Text="System Settings" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <ScrollViewer>
+                        <StackPanel Margin="10,0,20,0">
+                            <TextBlock Text="System Settings" Classes="SectionHeader" />
+
+                            <!-- LCD Override -->
+                            <Border Classes="Card" x:Name="LcdOverrideControls" Margin="0 0 0 14">
+                                <StackPanel Spacing="10">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                            <material:MaterialIcon Kind="MonitorShimmer" Width="20" Height="20" Foreground="#00f0ff"/>
+                                            <TextBlock Text="LCD Overdrive (Ultra-Low Latency)" Classes="SubHeader" Margin="0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <CheckBox x:Name="LcdOverrideCheckBox" Content="Enable Overdrive" IsChecked="True" Grid.Column="1" VerticalAlignment="Center"/>
+                                    </Grid>
+
+                                    <TextBlock Text="Boosts panel response time to eliminate ghosting and reduce motion blur during high frame-rate gaming." Opacity="0.75" FontSize="12" Margin="0" />
+
+                                    <Border Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="8" Padding="10 8">
+                                        <Grid ColumnDefinitions="Auto,*">
+                                            <material:MaterialIcon Kind="AlertOutline" Foreground="#f59e0b" Width="16" Height="16" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="1" Text="Notice: LCD Overdrive increases display power draw slightly when running on battery." Foreground="#f59e0b" FontSize="11" VerticalAlignment="Center" Margin="0"/>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Boot Sound and Animation -->
+                            <Border Classes="Card" x:Name="BootSoundControls" Margin="0 0 0 14">
+                                <StackPanel Spacing="10">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                            <material:MaterialIcon Kind="VolumeHigh" Width="20" Height="20" Foreground="#00ff9d"/>
+                                            <TextBlock Text="Boot Sound &amp; Logo Animation" Classes="SubHeader" Margin="0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <CheckBox x:Name="BootAnimAndSoundCheckBox" Content="Enable Boot FX" IsChecked="False" Grid.Column="1" VerticalAlignment="Center" />
+                                    </Grid>
+
+                                    <TextBlock Text="Plays the signature Predator startup boot chime and logo animation upon cold system power-on." Opacity="0.75" FontSize="12" Margin="0" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- System Information -->
+                            <Border Classes="Card" Margin="0 0 0 14">
+                                <StackPanel Spacing="12">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                            <material:MaterialIcon Kind="InformationOutline" Width="20" Height="20" Foreground="#00f0ff"/>
+                                            <TextBlock Text="System Specifications &amp; Versions" Classes="SubHeader" Margin="0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" Margin="0 6 0 10">
+                                        <!-- Left Column: Hardware -->
+                                        <!-- Model -->
+                                        <Border Grid.Row="0" Grid.Column="0" Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="8" Padding="12 8" Margin="0 0 6 8">
+                                            <Grid ColumnDefinitions="110,*">
+                                                <TextBlock Text="Model:" FontWeight="SemiBold" Foreground="#94a3b8" FontSize="12" VerticalAlignment="Center" Margin="0"/>
+                                                <TextBlock x:Name="ModelNameText" Grid.Column="1" Text="UNKNOWN" FontWeight="Bold" Foreground="#eff9ff" FontSize="12" VerticalAlignment="Center" Margin="0"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Laptop Type -->
+                                        <Border Grid.Row="1" Grid.Column="0" Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="8" Padding="12 8" Margin="0 0 6 8">
+                                            <Grid ColumnDefinitions="110,*">
+                                                <TextBlock Text="Laptop Type:" FontWeight="SemiBold" Foreground="#94a3b8" FontSize="12" VerticalAlignment="Center" Margin="0"/>
+                                                <TextBlock x:Name="LaptopTypeText" Grid.Column="1" Text="UNKNOWN" FontWeight="Bold" Foreground="#eff9ff" FontSize="12" VerticalAlignment="Center" Margin="0"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Features -->
+                                        <Border Grid.Row="2" Grid.Column="0" Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="8" Padding="12 8" Margin="0 0 6 0">
+                                            <Grid ColumnDefinitions="110,*">
+                                                <TextBlock Text="Features:" FontWeight="SemiBold" Foreground="#94a3b8" FontSize="12" VerticalAlignment="Center" Margin="0"/>
+                                                <TextBlock x:Name="SupportedFeaturesTextBlock" Grid.Column="1" Text="UNKNOWN" FontWeight="Bold" Foreground="#eff9ff" FontSize="12" VerticalAlignment="Center" Margin="0" TextWrapping="Wrap"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Right Column: Software & Kernel -->
+                                        <!-- Project Version -->
+                                        <Border Grid.Row="0" Grid.Column="1" Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="8" Padding="12 8" Margin="6 0 0 8">
+                                            <Grid ColumnDefinitions="120,*">
+                                                <TextBlock Text="Project Version:" FontWeight="SemiBold" Foreground="#94a3b8" FontSize="12" VerticalAlignment="Center" Margin="0"/>
+                                                <TextBlock x:Name="ProjectVersionText" Grid.Column="1" Text="UNKNOWN" FontWeight="Bold" Foreground="#00f0ff" FontSize="12" VerticalAlignment="Center" Margin="0"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Daemon Version -->
+                                        <Border Grid.Row="1" Grid.Column="1" Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="8" Padding="12 8" Margin="6 0 0 8">
+                                            <Grid ColumnDefinitions="120,*">
+                                                <TextBlock Text="Daemon Version:" FontWeight="SemiBold" Foreground="#94a3b8" FontSize="12" VerticalAlignment="Center" Margin="0"/>
+                                                <TextBlock x:Name="DaemonVersionText" Grid.Column="1" Text="UNKNOWN" FontWeight="Bold" Foreground="#00ff9d" FontSize="12" VerticalAlignment="Center" Margin="0"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Driver Version -->
+                                        <Border Grid.Row="2" Grid.Column="1" Background="#0b0e16" BorderBrush="#1d2538" BorderThickness="1" CornerRadius="8" Padding="12 8" Margin="6 0 0 0">
+                                            <Grid ColumnDefinitions="120,*">
+                                                <TextBlock Text="Driver Version:" FontWeight="SemiBold" Foreground="#94a3b8" FontSize="12" VerticalAlignment="Center" Margin="0"/>
+                                                <TextBlock x:Name="DriverVersionText" Grid.Column="1" Text="UNKNOWN" FontWeight="Bold" Foreground="#eff9ff" FontSize="12" VerticalAlignment="Center" Margin="0"/>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+
+                                    <WrapPanel Orientation="Horizontal" Margin="0 8 0 0">
+                                        <Button x:Name="UpdatesButton" Content="Check for Updates" Classes="SecondaryButton" Margin="0 0 10 6" Click="UpdatesButton_OnClick" />
+                                        <Button x:Name="DeveloperModeButton" Content="Developer Mode" Classes="SecondaryButton" Margin="0 0 10 6" IsVisible="False" Click="DeveloperMode_OnClick" />
+                                        <Button x:Name="IssuePageButton" Content="Issue / Feedback" Classes="SecondaryButton" Margin="0 0 10 6" Click="IssuePageButton_OnClick" />
+                                        <Button x:Name="InternalsManagerButton" Content="Internals Manager" Classes="SecondaryButton" Margin="0 0 0 6" Click="InternalsMangerWindow_OnClick" />
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+        <!-- Overlay Grid (on separate layer) -->
+        <Grid x:Name="DaemonErrorGrid" Panel.ZIndex="100" Background="#99000000" IsHitTestVisible="True"
+              IsVisible="True">
+            <Border
+                BorderBrush="#ff2a55"
+                BorderThickness="1.5"
+                CornerRadius="16"
+                Padding="30"
+                Width="420"
+                Height="280"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%, 100%">
+                        <GradientStop Offset="0" Color="#12080c" />
+                        <GradientStop Offset="1" Color="#0b0e16" />
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="16">
+                    <!-- Material Icon -->
+                    <material:MaterialIcon Kind="LanDisconnect" Foreground="#ff2a55" Width="48" Height="48"
+                                           HorizontalAlignment="Center" />
+                    <StackPanel Spacing="4">
+                        <!-- Message -->
+                        <TextBlock Text="Daemon Not Connected"
+                                   Foreground="#ffffff"
+                                   FontSize="18"
+                                   HorizontalAlignment="Center"
+                                   Classes="SectionHeader"
+                                   Margin="0" />
+
+                        <TextBlock
+                            Text="PredatorSense background daemon is not reachable. Please check systemctl status predatorsense-daemon."
+                            Foreground="#94a3b8"
+                            FontSize="12"
+                            TextWrapping="Wrap"
+                            TextAlignment="Center"
+                            HorizontalAlignment="Center" />
+                    </StackPanel>
+
+                    <!-- Retry Button -->
+                    <Button Content="Retry Connection"
+                            HorizontalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            Click="RetryConnectionButton_OnClick" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

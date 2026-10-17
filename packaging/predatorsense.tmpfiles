@@ -1,0 +1,7 @@
+# PredatorSense systemd-tmpfiles rule
+# Grant rw permissions to linuwu_sense group on Acer sysfs hardware nodes
+z /sys/module/linuwu_sense/drivers/platform:acer-wmi/acer-wmi/predator_sense/* 0660 root linuwu_sense - -
+z /sys/module/linuwu_sense/drivers/platform:acer-wmi/acer-wmi/nitro_sense/* 0660 root linuwu_sense - -
+z /sys/module/linuwu_sense/drivers/platform:acer-wmi/acer-wmi/four_zoned_kb/* 0660 root linuwu_sense - -
+z /sys/module/linuwu_sense/drivers/platform:acer-wmi/acer-wmi/back_logo/* 0660 root linuwu_sense - -
+z /var/run/predatorsense.sock 0666 root root - -

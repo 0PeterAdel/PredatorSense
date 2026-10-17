@@ -1,0 +1,13 @@
+[Unit]
+Description=PredatorSense Kernel Driver Module Management
+DefaultDependencies=no
+After=systemd-modules-load.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/sbin/modprobe linuwu_sense
+ExecStop=/sbin/modprobe -r linuwu_sense
+
+[Install]
+WantedBy=multi-user.target

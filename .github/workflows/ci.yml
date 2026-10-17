@@ -1,0 +1,65 @@
+name: CI - Build & Syntax Verification
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-gui:
+    name: Build Avalonia GUI (.NET 9)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore NuGet Packages
+        run: dotnet restore gui/PredatorSense.csproj
+
+      - name: Build GUI (Release)
+        run: dotnet build gui/PredatorSense.csproj -c Release --no-incremental
+
+  verify-daemon:
+    name: Verify Python Daemon Syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Python Bytecode Compilation Test
+        run: |
+          python -m py_compile daemon/*.py
+          python -m py_compile packaging/*.py 2>/dev/null || true
+
+  verify-driver-syntax:
+    name: Verify Kernel Driver Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Kernel Headers
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y linux-headers-generic build-essential
+
+      - name: Compile Kernel Module
+        run: |
+          KVER=$(ls /lib/modules | sort -V | tail -n1)
+          echo "Compiling against kernel: ${KVER}"
+          make -C driver KVER="${KVER}"

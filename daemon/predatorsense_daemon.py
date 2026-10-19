@@ -19,6 +19,8 @@ import threading
 import signal
 import configparser
 import traceback
+import math
+import colorsys
 from pathlib import Path
 from enum import Enum
 from PowerSourceDetection import PowerSourceDetector 
@@ -89,6 +91,226 @@ class LaptopType(Enum):
     PREDATOR = 1
     NITRO = 2
 
+class DynamicEffectRunner:
+    """Runs software dynamic RGB animations continuously in daemon space across all 4 keyboard zones."""
+
+    def __init__(self, manager):
+        self.manager = manager
+        self.running = False
+        self.effect = ""
+        self.speed = 5
+        self.brightness = 100
+        self.direction = 1
+        self.color = "00F0FF"
+        self._thread = None
+        self._stop_event = threading.Event()
+        self._lock = threading.Lock()
+        self._cached_cpu_temp_path = None
+
+    def start(self, effect: str, speed: int = 5, brightness: int = 100, direction: int = 1, color: str = "00F0FF") -> bool:
+        with self._lock:
+            self._stop_locked()
+            self.effect = effect
+            self.speed = max(0, min(9, speed))
+            self.brightness = max(0, min(100, brightness))
+            self.direction = 1 if direction == 1 else 2
+            self.color = color if color and len(color) == 6 else "00F0FF"
+            self.running = True
+            self._stop_event.clear()
+            self._thread = threading.Thread(target=self._run_loop, daemon=True, name="DynamicEffectRunner")
+            self._thread.start()
+            log.info(f"DynamicEffectRunner started '{self.effect}' (speed={self.speed}, brightness={self.brightness})")
+            return True
+
+    def stop(self) -> bool:
+        with self._lock:
+            return self._stop_locked()
+
+    def _stop_locked(self) -> bool:
+        if not self.running:
+            return True
+        self.running = False
+        self._stop_event.set()
+        if self._thread and self._thread.is_alive():
+            self._thread.join(timeout=1.0)
+        self._thread = None
+        log.info(f"DynamicEffectRunner stopped '{self.effect}'")
+        return True
+
+    def get_status(self) -> dict:
+        with self._lock:
+            return {
+                "running": self.running,
+                "effect": self.effect,
+                "speed": self.speed,
+                "brightness": self.brightness,
+                "direction": self.direction,
+                "color": self.color
+            }
+
+    def _read_cpu_temp(self) -> float:
+        try:
+            if not self._cached_cpu_temp_path or not os.path.exists(self._cached_cpu_temp_path):
+                for d in glob.glob("/sys/class/hwmon/hwmon*"):
+                    name_file = os.path.join(d, "name")
+                    if os.path.exists(name_file):
+                        try:
+                            with open(name_file, "r") as f:
+                                name = f.read().lower()
+                            if "coretemp" in name or "k10temp" in name or "acpitz" in name:
+                                temp_in = os.path.join(d, "temp1_input")
+                                if os.path.exists(temp_in):
+                                    self._cached_cpu_temp_path = temp_in
+                                    break
+                        except Exception:
+                            continue
+                if not self._cached_cpu_temp_path:
+                    if os.path.exists("/sys/class/thermal/thermal_zone0/temp"):
+                        self._cached_cpu_temp_path = "/sys/class/thermal/thermal_zone0/temp"
+
+            if self._cached_cpu_temp_path and os.path.exists(self._cached_cpu_temp_path):
+                with open(self._cached_cpu_temp_path, "r") as f:
+                    val = float(f.read().strip())
+                return val / 1000.0 if val > 1000 else val
+        except Exception:
+            pass
+        return 50.0
+
+    def _read_battery_pct(self) -> int:
+        try:
+            for b in ["BAT1", "BAT0"]:
+                cap_file = f"/sys/class/power_supply/{b}/capacity"
+                if os.path.exists(cap_file):
+                    with open(cap_file, "r") as f:
+                        return int(f.read().strip())
+        except Exception:
+            pass
+        return 80
+
+    def _color_from_hue(self, hue01: float) -> str:
+        h = (hue01 % 1.0)
+        r, g, b = colorsys.hsv_to_rgb(h, 1.0, 1.0)
+        return f"{int(r * 255):02X}{int(g * 255):02X}{int(b * 255):02X}"
+
+    def _ember_color(self, intensity: float) -> str:
+        clamped = max(0.4, min(1.2, intensity))
+        r = int(max(120, min(255, 230 * clamped)))
+        g = int(max(15, min(170, 65 * clamped * clamped)))
+        b = int(max(0, min(30, 10 * clamped)))
+        return f"{r:02X}{g:02X}{b:02X}"
+
+    def _lerp_hex(self, hex_a: str, hex_b: str, factor: float) -> str:
+        factor = max(0.0, min(1.0, factor))
+        ra, ga, ba = int(hex_a[0:2], 16), int(hex_a[2:4], 16), int(hex_a[4:6], 16)
+        rb, gb, bb = int(hex_b[0:2], 16), int(hex_b[2:4], 16), int(hex_b[4:6], 16)
+        r = int(ra + (rb - ra) * factor)
+        g = int(ga + (gb - ga) * factor)
+        b = int(ba + (bb - ba) * factor)
+        return f"{r:02X}{g:02X}{b:02X}"
+
+    def _run_loop(self):
+        step = 0.0
+        frame_count = 0
+        while not self._stop_event.is_set() and self.running:
+            try:
+                speed_factor = 0.04 + (self.speed * 0.04)
+                step += speed_factor
+                frame_count += 1
+
+                throttle_ms = max(80, 240 - (self.speed * 16))
+                z1, z2, z3, z4 = "00F0FF", "00F0FF", "00F0FF", "00F0FF"
+
+                eff = self.effect
+                if eff == "sw_rainbow_flow":
+                    r_hue = (step * 0.05) % 1.0 if self.direction == 1 else (1.0 - (step * 0.05) % 1.0)
+                    rp = ((r_hue % 1.0) + 1.0) % 1.0
+                    z1 = self._color_from_hue(rp)
+                    z2 = self._color_from_hue((rp + 0.25) % 1.0)
+                    z3 = self._color_from_hue((rp + 0.50) % 1.0)
+                    z4 = self._color_from_hue((rp + 0.75) % 1.0)
+
+                elif eff == "sw_cyberpunk_pulse":
+                    cp_cyan = "00F0FF"
+                    cp_pink = "FF007F"
+                    cp_swap = ((frame_count // 8) % 2) == 0
+                    z1 = cp_cyan if cp_swap else cp_pink
+                    z2 = cp_pink if cp_swap else cp_cyan
+                    z3 = cp_cyan if cp_swap else cp_pink
+                    z4 = cp_pink if cp_swap else cp_cyan
+
+                elif eff == "sw_matrix_rain":
+                    matrix_pos = ((frame_count // 4) % 4) if self.direction == 1 else (3 - ((frame_count // 4) % 4))
+                    z1 = "39FF14" if matrix_pos == 0 else ("003B00" if matrix_pos == 3 else "001100")
+                    z2 = "39FF14" if matrix_pos == 1 else ("003B00" if matrix_pos == 0 else "001100")
+                    z3 = "39FF14" if matrix_pos == 2 else ("003B00" if matrix_pos == 1 else "001100")
+                    z4 = "39FF14" if matrix_pos == 3 else ("003B00" if matrix_pos == 2 else "001100")
+
+                elif eff == "sw_cylon_scanner":
+                    pos_seq = [0, 1, 2, 3, 2, 1]
+                    cylon_idx = pos_seq[(frame_count // 4) % len(pos_seq)]
+                    scan_col = self.color if self.color else "FF0033"
+                    dim_col = "140205"
+                    z1 = scan_col if cylon_idx == 0 else dim_col
+                    z2 = scan_col if cylon_idx == 1 else dim_col
+                    z3 = scan_col if cylon_idx == 2 else dim_col
+                    z4 = scan_col if cylon_idx == 3 else dim_col
+
+                elif eff == "sw_fire_ember":
+                    z1 = self._ember_color(0.85 + math.sin(step * 0.6) * 0.15)
+                    z2 = self._ember_color(0.95 + math.sin(step * 0.6 + 1.2) * 0.2)
+                    z3 = self._ember_color(0.90 + math.sin(step * 0.6 + 2.4) * 0.18)
+                    z4 = self._ember_color(0.80 + math.sin(step * 0.6 + 3.6) * 0.22)
+
+                elif eff == "sw_police_strobe":
+                    is_blue = ((frame_count // 5) % 2) == 0
+                    z1 = z2 = "0044FF" if is_blue else "110000"
+                    z3 = z4 = "000022" if is_blue else "FF0022"
+                    throttle_ms = max(120, 260 - (self.speed * 15))
+
+                elif eff == "sw_cpu_heatmap":
+                    temp = self._read_cpu_temp()
+                    if temp < 48.0:
+                        hm_col = "00E5FF"
+                    elif temp < 60.0:
+                        hm_col = "00FF88"
+                    elif temp < 72.0:
+                        hm_col = "FFB703"
+                    elif temp < 82.0:
+                        hm_col = "FB8500"
+                    else:
+                        hm_col = "FF0033"
+                    z1 = z2 = z3 = z4 = hm_col
+                    throttle_ms = 1200
+
+                elif eff == "sw_battery_fuel":
+                    pct = self._read_battery_pct()
+                    fuel_col = "00E5FF" if pct > 50 else ("FFB703" if pct > 20 else "E63946")
+                    z1 = fuel_col if pct > 5 else "1A1D24"
+                    z2 = fuel_col if pct >= 25 else "1A1D24"
+                    z3 = fuel_col if pct >= 50 else "1A1D24"
+                    z4 = fuel_col if pct >= 75 else "1A1D24"
+                    throttle_ms = 2500
+
+                elif eff == "sw_aurora":
+                    a1 = (math.sin(step * 0.35) + 1.0) / 2.0
+                    a2 = (math.sin(step * 0.35 + 0.8) + 1.0) / 2.0
+                    a3 = (math.sin(step * 0.35 + 1.6) + 1.0) / 2.0
+                    a4 = (math.sin(step * 0.35 + 2.4) + 1.0) / 2.0
+                    z1 = self._lerp_hex("00F5D4", "7B2CBF", a1)
+                    z2 = self._lerp_hex("00F5D4", "7B2CBF", a2)
+                    z3 = self._lerp_hex("00F5D4", "7B2CBF", a3)
+                    z4 = self._lerp_hex("00F5D4", "7B2CBF", a4)
+
+                self.manager._raw_set_per_zone_mode(z1, z2, z3, z4, self.brightness)
+
+                if self._stop_event.wait(timeout=throttle_ms / 1000.0):
+                    break
+            except Exception as e:
+                log.error(f"Error in DynamicEffectRunner loop: {e}")
+                if self._stop_event.wait(timeout=0.5):
+                    break
+
+
 class PredatorSenseManager:
     """Manages all the PredatorSense-Daemon features"""
 
@@ -152,6 +374,7 @@ class PredatorSenseManager:
             raise FileNotFoundError(f"Base path does not exist: {self.base_path}")
         
         self.power_monitor = None
+        self.dynamic_effect_runner = DynamicEffectRunner(self)
 
     def _get_restart_attempts(self) -> int:
         """Get current restart attempt count"""
@@ -882,13 +1105,8 @@ class PredatorSenseManager:
 
         return self._read_file("/sys/module/linuwu_sense/drivers/platform:acer-wmi/acer-wmi/four_zoned_kb/per_zone_mode")
 
-    def set_per_zone_mode(self, zone1: str, zone2: str, zone3: str, zone4: str, brightness: int) -> bool:
-        """Set per-zone mode configuration
-        
-        Args:
-            zone1-zone4: RGB hex values (e.g., "4287f5")
-            brightness: 0-100
-        """
+    def _raw_set_per_zone_mode(self, zone1: str, zone2: str, zone3: str, zone4: str, brightness: int) -> bool:
+        """Raw set per-zone mode without stopping background dynamic runner"""
         if "per_zone_mode" not in self.available_features:
             return False
 
@@ -920,6 +1138,18 @@ class PredatorSenseManager:
             value
         )
 
+    def set_per_zone_mode(self, zone1: str, zone2: str, zone3: str, zone4: str, brightness: int) -> bool:
+        """Set per-zone mode configuration
+        
+        Args:
+            zone1-zone4: RGB hex values (e.g., "4287f5")
+            brightness: 0-100
+        """
+        if hasattr(self, "dynamic_effect_runner") and self.dynamic_effect_runner.running:
+            self.dynamic_effect_runner.stop()
+
+        return self._raw_set_per_zone_mode(zone1, zone2, zone3, zone4, brightness)
+
     def get_four_zone_mode(self) -> str:
         """Get four-zone mode configuration"""
         if "four_zone_mode" not in self.available_features:
@@ -938,6 +1168,9 @@ class PredatorSenseManager:
             direction: 1-2 (1=right to left, 2=left to right)
             red, green, blue: 0-255 (RGB color values)
         """
+        if hasattr(self, "dynamic_effect_runner") and self.dynamic_effect_runner.running:
+            self.dynamic_effect_runner.stop()
+
         if "four_zone_mode" not in self.available_features:
             return False
 
@@ -975,6 +1208,24 @@ class PredatorSenseManager:
             "/sys/module/linuwu_sense/drivers/platform:acer-wmi/acer-wmi/four_zoned_kb/four_zone_mode",
             value
         )
+
+    def set_dynamic_effect(self, effect: str, speed: int = 5, brightness: int = 100, direction: int = 1, color: str = "00F0FF") -> bool:
+        """Set dynamic software effect running continuously in root daemon space"""
+        if "per_zone_mode" not in self.available_features:
+            return False
+        return self.dynamic_effect_runner.start(effect, speed, brightness, direction, color)
+
+    def stop_dynamic_effect(self) -> bool:
+        """Stop dynamic software effect"""
+        if hasattr(self, "dynamic_effect_runner"):
+            return self.dynamic_effect_runner.stop()
+        return True
+
+    def get_dynamic_effect(self) -> dict:
+        """Get running dynamic effect status"""
+        if hasattr(self, "dynamic_effect_runner"):
+            return self.dynamic_effect_runner.get_status()
+        return {"running": False, "effect": "", "speed": 5, "brightness": 100, "direction": 1, "color": "00F0FF"}
 
 
     def get_back_logo_color(self) -> str:
@@ -1086,6 +1337,8 @@ class PredatorSenseManager:
 
         if "back_logo" in self.available_features:
             settings["back_logo_color"] = self.get_back_logo_color()
+
+        settings["dynamic_effect"] = self.get_dynamic_effect()
 
         return settings
 
@@ -1463,6 +1716,39 @@ class DaemonServer:
                         "enabled": enabled
                     } if success else None,
                     "error": "Failed to set back logo/lightbar color" if not success else None
+                }
+
+            elif command == "set_dynamic_effect":
+                if "per_zone_mode" not in self.manager.available_features:
+                    return {
+                        "success": False,
+                        "error": "Per-zone keyboard mode is not supported on this device"
+                    }
+                effect = params.get("effect", "")
+                speed = params.get("speed", 5)
+                brightness = params.get("brightness", 100)
+                direction = params.get("direction", 1)
+                color = params.get("color", "00F0FF")
+                success = self.manager.set_dynamic_effect(effect, speed, brightness, direction, color)
+                return {
+                    "success": success,
+                    "data": self.manager.get_dynamic_effect() if success else None,
+                    "error": "Failed to set dynamic effect" if not success else None
+                }
+
+            elif command == "stop_dynamic_effect":
+                success = self.manager.stop_dynamic_effect()
+                return {
+                    "success": success,
+                    "data": self.manager.get_dynamic_effect(),
+                    "error": "Failed to stop dynamic effect" if not success else None
+                }
+
+            elif command == "get_dynamic_effect":
+                return {
+                    "success": True,
+                    "data": self.manager.get_dynamic_effect(),
+                    "error": None
                 }
 
             elif command == "get_supported_features":

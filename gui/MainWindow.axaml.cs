@@ -78,6 +78,8 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     private bool _isManualFanControl;
     private bool _isSettingFanSpeed;
     private bool _isLoadingSettings;
+    private ScrollViewer? _globalEffectsContainer;
+    private ScrollViewer? _areaThemesContainer;
     private bool _isGlobalStaticActive = true;
     private Button? _applyGlobalColorButton;
     private int _keyboardBrightness = 100;
@@ -430,6 +432,8 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         _guiVersionTextBlock = nameScope.Find<TextBlock>("ProjectVersionText");
         _daemonErrorGrid = nameScope.Find<Grid>("DaemonErrorGrid");
         _keyboardLightingScrollViewer = nameScope.Find<ScrollViewer>("KeyboardLightingScrollViewer");
+        _globalEffectsContainer = nameScope.Find<ScrollViewer>("GlobalEffectsContainer");
+        _areaThemesContainer = nameScope.Find<ScrollViewer>("AreaThemesContainer");
         _mainTabControl = nameScope.Find<TabControl>("MainTabControl");
         _keyboardLightingTab = nameScope.Find<TabItem>("KeyboardLightingPanel");
 
@@ -736,6 +740,122 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         finally
         {
             _isLoadingSettings = false;
+            SynchronizeActiveLightingModeOnStartup();
+        }
+    }
+
+    private void SynchronizeActiveLightingModeOnStartup()
+    {
+        if (!_settings.HasFourZoneKb && !AppState.DevMode)
+            return;
+
+        // 1. Check if root daemon has a persistent dynamic software effect running
+        if (_settings.DynamicEffect != null && _settings.DynamicEffect.Running && !string.IsNullOrEmpty(_settings.DynamicEffect.Effect))
+        {
+            var effectId = _settings.DynamicEffect.Effect;
+            var effect = DynamicEffectsEngine.AvailableEffects.Find(x => x.Id == effectId);
+            if (effect != null && _dynamicEffectsEngine != null)
+            {
+                _isGlobalStaticActive = false;
+                HighlightEffectCard(effectId);
+
+                _dynamicEffectsEngine.SetParameters(
+                    _settings.DynamicEffect.Speed,
+                    _settings.DynamicEffect.Brightness,
+                    _settings.DynamicEffect.Direction,
+                    Color.TryParse($"#{_settings.DynamicEffect.Color}", out var col) ? col : Color.Parse("#00D4FF")
+                );
+
+                if (_dynamicSpeedSlider != null)
+                    _dynamicSpeedSlider.Value = _settings.DynamicEffect.Speed;
+                if (_dynamicSpeedText != null)
+                    _dynamicSpeedText.Text = _settings.DynamicEffect.Speed.ToString();
+
+                SetDirectionRadioButtons(_settings.DynamicEffect.Direction);
+
+                if (_dynamicEffectTitleText != null)
+                    _dynamicEffectTitleText.Text = $"{effect.Name} • Smart Dynamic Animation";
+                if (_dynamicEffectDescText != null)
+                    _dynamicEffectDescText.Text = effect.Description;
+                if (_dynamicEffectIcon != null)
+                    _dynamicEffectIcon.Kind = effect.Icon;
+
+                if (_activeModeStatusText != null)
+                    _activeModeStatusText.Text = $"Running: {effect.Name} (Smart Dynamic)";
+                if (_activeModeDot != null)
+                    _activeModeDot.Background = Brush.Parse("#00d4ff");
+
+                if (_applyGlobalColorButton != null)
+                    _applyGlobalColorButton.IsVisible = false;
+
+                // Start local UI preview in sync mode without overwriting hardware!
+                _ = _dynamicEffectsEngine.StartEffectAsync(effect, syncOnly: true);
+                return;
+            }
+        }
+
+        // 2. Check if hardware four_zone_mode is running (modes 1-7)
+        if (TryParseFourZoneMode(_settings.FourZoneMode, out var hwMode, out var hwSpeed, out var hwBrightness, out var hwDir, out var r, out var g, out var b) && hwMode > 0)
+        {
+            var effect = DynamicEffectsEngine.AvailableEffects.Find(x => x.IsHardware && x.HardwareMode == hwMode);
+            if (effect != null && _dynamicEffectsEngine != null)
+            {
+                _isGlobalStaticActive = false;
+                HighlightEffectCard(effect.Id);
+
+                _dynamicEffectsEngine.SetParameters(hwSpeed, hwBrightness, hwDir, Color.FromRgb((byte)r, (byte)g, (byte)b));
+
+                if (_dynamicSpeedSlider != null)
+                    _dynamicSpeedSlider.Value = hwSpeed;
+                if (_dynamicSpeedText != null)
+                    _dynamicSpeedText.Text = hwSpeed.ToString();
+
+                SetDirectionRadioButtons(hwDir);
+
+                if (_dynamicEffectTitleText != null)
+                    _dynamicEffectTitleText.Text = $"{effect.Name} • Hardware Mode (0% CPU)";
+                if (_dynamicEffectDescText != null)
+                    _dynamicEffectDescText.Text = effect.Description;
+                if (_dynamicEffectIcon != null)
+                    _dynamicEffectIcon.Kind = effect.Icon;
+
+                if (_activeModeStatusText != null)
+                    _activeModeStatusText.Text = $"Hardware Mode: {effect.Name}";
+                if (_activeModeDot != null)
+                    _activeModeDot.Background = Brush.Parse("#00ff9d");
+
+                if (_applyGlobalColorButton != null)
+                    _applyGlobalColorButton.IsVisible = false;
+
+                // Start local UI preview in sync mode without overwriting hardware!
+                _ = _dynamicEffectsEngine.StartEffectAsync(effect, syncOnly: true);
+                return;
+            }
+        }
+
+        // 3. Otherwise, static mode: ensure UI highlights static card
+        _isGlobalStaticActive = true;
+        HighlightEffectCard("static");
+        if (_activeModeStatusText != null)
+            _activeModeStatusText.Text = "Static Global Mode";
+        if (_activeModeDot != null)
+            _activeModeDot.Background = Brush.Parse("#00ff9d");
+        if (_applyGlobalColorButton != null)
+            _applyGlobalColorButton.IsVisible = true;
+    }
+
+    private void HighlightEffectCard(string effectId)
+    {
+        if (_globalEffectsContainer != null)
+        {
+            foreach (var rb in _globalEffectsContainer.GetLogicalDescendants().OfType<RadioButton>())
+            {
+                if (rb.Classes.Contains("EffectCard") && rb.Tag?.ToString() == effectId)
+                {
+                    rb.IsChecked = true;
+                    break;
+                }
+            }
         }
     }
 
@@ -1147,6 +1267,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void CpuFanSlider_ValueChanged(object sender, AvaloniaPropertyChangedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (e.Property == Slider.ValueProperty)
         {
             _cpuFanSpeed = Convert.ToInt32(e.NewValue);
@@ -1157,6 +1278,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void GpuFanSlider_ValueChanged(object sender, AvaloniaPropertyChangedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (e.Property == Slider.ValueProperty)
         {
             _gpuFanSpeed = Convert.ToInt32(e.NewValue);
@@ -1296,6 +1418,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void KeyboardBrightnessSlider_ValueChanged(object sender, AvaloniaPropertyChangedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (e.Property == Slider.ValueProperty)
         {
             int val = Convert.ToInt32(e.NewValue);
@@ -1336,6 +1459,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void ZoneColorPicker_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (e.Property == ColorPicker.ColorProperty && !_isSyncingAllZones)
         {
             if (_selectZoneComboBox?.SelectedIndex == 0 && sender is ColorPicker cp)
@@ -1610,6 +1734,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void AreaThemeCard_Click(object? sender, RoutedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (sender is not RadioButton rb || rb.Tag == null) return;
         var tag = rb.Tag.ToString();
         if (string.IsNullOrEmpty(tag)) return;
@@ -1810,6 +1935,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void DynamicSpeedSlider_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (e.Property == Slider.ValueProperty && _dynamicSpeedSlider != null)
         {
             int val = (int)_dynamicSpeedSlider.Value;
@@ -1827,6 +1953,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void DynamicEffectColorPicker_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (e.Property == ColorPicker.ColorProperty)
         {
             if (_isGlobalStaticActive)
@@ -1958,6 +2085,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private async void EffectCard_Click(object? sender, RoutedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (sender is not RadioButton rb || rb.Tag == null) return;
         var tag = rb.Tag.ToString();
         if (string.IsNullOrEmpty(tag)) return;
@@ -2008,6 +2136,9 @@ public partial class MainWindow : Window, INotifyPropertyChanged
                 }
             }
         }
+
+        // Auto-play the selected effect immediately
+        PlayDynamicEffectButton_Click(sender, e);
     }
 
     private async void ApplyGlobalColor_Click(object? sender, RoutedEventArgs e)
@@ -2078,6 +2209,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void BackLogoColorPicker_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (e.Property == ColorPicker.ColorProperty)
         {
             var col = _backLogoColorPicker?.Color ?? Color.Parse("#00f0ff");
@@ -2102,6 +2234,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void LogoSpeedSlider_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (e.Property == Slider.ValueProperty && _logoSpeedSlider != null)
         {
             int val = (int)_logoSpeedSlider.Value;
@@ -2140,6 +2273,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private async void LogoEffectCard_Click(object? sender, RoutedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (sender is not RadioButton rb || rb.Tag == null) return;
         var tag = rb.Tag.ToString();
         if (string.IsNullOrEmpty(tag)) return;
@@ -2341,6 +2475,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void LightingSpeedSlider_ValueChanged(object sender, AvaloniaPropertyChangedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (e.Property == Slider.ValueProperty)
         {
             int val = Convert.ToInt32(e.NewValue);
@@ -2354,6 +2489,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void BackLogoBrightnessSlider_ValueChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
+        if (_isLoadingSettings) return;
         if (e.Property == Slider.ValueProperty)
         {
             int val = Convert.ToInt32(e.NewValue);

@@ -534,6 +534,80 @@ public class PredatorSenseClient : IDisposable
         return response.RootElement.GetProperty("success").GetBoolean();
     }
 
+    /// <summary>
+    ///     Set dynamic software effect running continuously in daemon background
+    /// </summary>
+    public async Task<bool> SetDynamicEffectAsync(string effect, int speed, int brightness, int direction, string color)
+    {
+        if (!IsFeatureAvailable("per_zone_mode"))
+        {
+            return false;
+        }
+
+        var parameters = new Dictionary<string, object>
+        {
+            { "effect", effect },
+            { "speed", speed },
+            { "brightness", brightness },
+            { "direction", direction },
+            { "color", color }
+        };
+
+        try
+        {
+            var response = await SendCommandAsync("set_dynamic_effect", parameters);
+            if (response.RootElement.TryGetProperty("success", out var successProp))
+            {
+                return successProp.GetBoolean();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Client] SetDynamicEffectAsync error: {ex.Message}");
+        }
+        return false;
+    }
+
+    /// <summary>
+    ///     Stop dynamic software effect running in daemon
+    /// </summary>
+    public async Task<bool> StopDynamicEffectAsync()
+    {
+        try
+        {
+            var response = await SendCommandAsync("stop_dynamic_effect");
+            if (response.RootElement.TryGetProperty("success", out var successProp))
+            {
+                return successProp.GetBoolean();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Client] StopDynamicEffectAsync error: {ex.Message}");
+        }
+        return false;
+    }
+
+    /// <summary>
+    ///     Get dynamic software effect running status from daemon
+    /// </summary>
+    public async Task<DynamicEffectSettings?> GetDynamicEffectAsync()
+    {
+        try
+        {
+            var response = await SendCommandAsync("get_dynamic_effect");
+            if (response.RootElement.TryGetProperty("data", out var dataProp))
+            {
+                return JsonSerializer.Deserialize<DynamicEffectSettings>(dataProp.GetRawText());
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Client] GetDynamicEffectAsync error: {ex.Message}");
+        }
+        return null;
+    }
+
     protected virtual void Dispose(bool disposing)
     {
         if (_disposed) return;
@@ -612,8 +686,20 @@ public class PredatorSenseSettings
 
     [JsonPropertyName("back_logo_color")] public string BackLogoColor { get; set; } = "";
 
+    [JsonPropertyName("dynamic_effect")] public DynamicEffectSettings? DynamicEffect { get; set; }
+
     [JsonPropertyName("modprobe_parameter")]
     public string ModprobeParameter { get; set; } = "";
+}
+
+public class DynamicEffectSettings
+{
+    [JsonPropertyName("running")] public bool Running { get; set; }
+    [JsonPropertyName("effect")] public string Effect { get; set; } = "";
+    [JsonPropertyName("speed")] public int Speed { get; set; } = 5;
+    [JsonPropertyName("brightness")] public int Brightness { get; set; } = 100;
+    [JsonPropertyName("direction")] public int Direction { get; set; } = 1;
+    [JsonPropertyName("color")] public string Color { get; set; } = "00F0FF";
 }
 
 public class ThermalProfileSettings

@@ -295,36 +295,52 @@ public class DynamicEffectsEngine
     public void UpdateSpeed(int speed)
     {
         _speed = Math.Clamp(speed, 0, 9);
-        if (_isRunning && _currentEffect != null && _currentEffect.IsHardware)
+        if (_isRunning && _currentEffect != null)
         {
-            var color = _currentEffect.SupportsCustomColor ? _customColor : Color.Parse($"#{_currentEffect.DefaultColorHex}");
-            _ = _client.SetFourZoneModeAsync(
-                _currentEffect.HardwareMode,
-                _speed,
-                _brightness,
-                _direction,
-                color.R,
-                color.G,
-                color.B
-            );
+            var hexColor = _currentEffect.SupportsCustomColor ? ToHex(_customColor) : _currentEffect.DefaultColorHex;
+            if (_currentEffect.IsHardware)
+            {
+                var color = _currentEffect.SupportsCustomColor ? _customColor : Color.Parse($"#{_currentEffect.DefaultColorHex}");
+                _ = _client.SetFourZoneModeAsync(
+                    _currentEffect.HardwareMode,
+                    _speed,
+                    _brightness,
+                    _direction,
+                    color.R,
+                    color.G,
+                    color.B
+                );
+            }
+            else
+            {
+                _ = _client.SetDynamicEffectAsync(_currentEffect.Id, _speed, _brightness, _direction, hexColor);
+            }
         }
     }
 
     public void UpdateBrightness(int brightness)
     {
         _brightness = Math.Clamp(brightness, 0, 100);
-        if (_isRunning && _currentEffect != null && _currentEffect.IsHardware)
+        if (_isRunning && _currentEffect != null)
         {
-            var color = _currentEffect.SupportsCustomColor ? _customColor : Color.Parse($"#{_currentEffect.DefaultColorHex}");
-            _ = _client.SetFourZoneModeAsync(
-                _currentEffect.HardwareMode,
-                _speed,
-                _brightness,
-                _direction,
-                color.R,
-                color.G,
-                color.B
-            );
+            var hexColor = _currentEffect.SupportsCustomColor ? ToHex(_customColor) : _currentEffect.DefaultColorHex;
+            if (_currentEffect.IsHardware)
+            {
+                var color = _currentEffect.SupportsCustomColor ? _customColor : Color.Parse($"#{_currentEffect.DefaultColorHex}");
+                _ = _client.SetFourZoneModeAsync(
+                    _currentEffect.HardwareMode,
+                    _speed,
+                    _brightness,
+                    _direction,
+                    color.R,
+                    color.G,
+                    color.B
+                );
+            }
+            else
+            {
+                _ = _client.SetDynamicEffectAsync(_currentEffect.Id, _speed, _brightness, _direction, hexColor);
+            }
         }
     }
 
@@ -337,10 +353,10 @@ public class DynamicEffectsEngine
             _animationCts.Dispose();
             _animationCts = null;
         }
-        await Task.CompletedTask;
+        await _client.StopDynamicEffectAsync();
     }
 
-    public async Task<bool> StartEffectAsync(DynamicEffectDefinition effect)
+    public async Task<bool> StartEffectAsync(DynamicEffectDefinition effect, bool syncOnly = false)
     {
         await StopAsync();
 
@@ -352,15 +368,19 @@ public class DynamicEffectsEngine
         {
             // Apply hardware mode directly to firmware via daemon
             var color = effect.SupportsCustomColor ? _customColor : Color.Parse($"#{effect.DefaultColorHex}");
-            var success = await _client.SetFourZoneModeAsync(
-                effect.HardwareMode,
-                _speed,
-                _brightness,
-                _direction,
-                color.R,
-                color.G,
-                color.B
-            );
+            var success = true;
+            if (!syncOnly)
+            {
+                success = await _client.SetFourZoneModeAsync(
+                    effect.HardwareMode,
+                    _speed,
+                    _brightness,
+                    _direction,
+                    color.R,
+                    color.G,
+                    color.B
+                );
+            }
 
             // Start smooth local GUI preview simulation
             _ = RunHardwarePreviewSimulationAsync(effect, _animationCts.Token);
@@ -368,8 +388,15 @@ public class DynamicEffectsEngine
         }
         else
         {
-            // Start software animation loop that safely drives both hardware and GUI
-            _ = RunSoftwareEffectLoopAsync(effect, _animationCts.Token);
+            var hexColor = effect.SupportsCustomColor ? ToHex(_customColor) : effect.DefaultColorHex;
+            bool daemonStarted = false;
+            if (!syncOnly)
+            {
+                daemonStarted = await _client.SetDynamicEffectAsync(effect.Id, _speed, _brightness, _direction, hexColor);
+            }
+
+            // Start software animation loop that safely drives GUI (and hardware only if daemon didn't take over)
+            _ = RunSoftwareEffectLoopAsync(effect, _animationCts.Token, dispatchToHardware: !daemonStarted && !syncOnly);
             return true;
         }
     }
@@ -481,7 +508,7 @@ public class DynamicEffectsEngine
         }
     }
 
-    private async Task RunSoftwareEffectLoopAsync(DynamicEffectDefinition effect, CancellationToken ct)
+    private async Task RunSoftwareEffectLoopAsync(DynamicEffectDefinition effect, CancellationToken ct, bool dispatchToHardware = false)
     {
         double step = 0;
         int frameCount = 0;
@@ -589,8 +616,8 @@ public class DynamicEffectsEngine
                 // Smooth GUI preview at 33 FPS
                 Dispatcher.UIThread.Post(() => _updatePreviewCallback(z1, z2, z3, z4));
 
-                // Throttled hardware dispatch to protect EC while keeping LED transition snappy
-                if ((DateTime.Now - lastHwDispatch).TotalMilliseconds >= hwThrottleMs)
+                // Throttled hardware dispatch only if daemon is not running the effect natively
+                if (dispatchToHardware && (DateTime.Now - lastHwDispatch).TotalMilliseconds >= hwThrottleMs)
                 {
                     lastHwDispatch = DateTime.Now;
                     _ = _client.SetPerZoneModeAsync(z1, z2, z3, z4, _brightness);

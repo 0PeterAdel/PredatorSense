@@ -463,145 +463,244 @@
                                         </Border>
                                     </Grid>
 
-                                    <!-- 2-Column Effect Grid -->
-                                    <ScrollViewer Grid.Row="1">
-                                        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <!-- Static Mode -->
-                                            <RadioButton Classes="EffectCard" Tag="static" IsChecked="True" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="CubeOutline" Width="18" Height="18" Foreground="#00f0ff"/>
-                                                    <TextBlock Text="Static" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                    <!-- Categorized 2-Column Effect Sections -->
+                                    <ScrollViewer Grid.Row="1" x:Name="GlobalEffectsContainer">
+                                        <StackPanel Spacing="10" Margin="0 4 0 0">
+                                            <!-- ============================================== -->
+                                            <!-- Section 1: Interactive Dynamic Effects (9)    -->
+                                            <!-- ============================================== -->
+                                            <StackPanel Spacing="5">
+                                                <Grid ColumnDefinitions="*,Auto" Margin="4 0">
+                                                    <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                                        <material:MaterialIcon Kind="AutoFix" Width="14" Height="14" Foreground="#00f0ff" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="DYNAMIC ANIMATIONS" FontSize="11" FontWeight="Bold" Foreground="#38bdf8" LetterSpacing="1" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <Border Grid.Column="1" Background="#09273a" BorderBrush="#00f0ff" BorderThickness="0.5" CornerRadius="4" Padding="6 1">
+                                                        <TextBlock Text="9 Smart Modes" FontSize="9.5" Foreground="#00f0ff" FontWeight="SemiBold"/>
+                                                    </Border>
+                                                </Grid>
+                                                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <!-- Rainbow Flow -->
+                                                    <RadioButton Classes="EffectCard" Tag="sw_rainbow_flow" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="PaletteOutline" Width="18" Height="18" Foreground="#a855f7" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Rainbow Flow" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="360° Hue Cycle" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Breathing -->
-                                            <RadioButton Classes="EffectCard" Tag="hw_breathing" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="HeartPulse" Width="18" Height="18" Foreground="#ff2a55"/>
-                                                    <TextBlock Text="Breathing" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Cyberpunk Pulse -->
+                                                    <RadioButton Classes="EffectCard" Tag="sw_cyberpunk_pulse" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="LightningBolt" Width="18" Height="18" Foreground="#c084fc" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Cyberpunk" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Neon Dual Pulse" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Wave -->
-                                            <RadioButton Classes="EffectCard" Tag="hw_wave" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="Waves" Width="18" Height="18" Foreground="#00d4ff"/>
-                                                    <TextBlock Text="Wave" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Matrix Cyber Rain -->
+                                                    <RadioButton Classes="EffectCard" Tag="sw_matrix_rain" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="CodeBraces" Width="18" Height="18" Foreground="#22c55e" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Matrix Rain" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Digital Data Cascade" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Shifting / Snake -->
-                                            <RadioButton Classes="EffectCard" Tag="hw_shifting" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="ArrowLeftRight" Width="18" Height="18" Foreground="#00ff9d"/>
-                                                    <TextBlock Text="Shifting" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Knight Rider -->
+                                                    <RadioButton Classes="EffectCard" Tag="sw_cylon_scanner" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="EyeOutline" Width="18" Height="18" Foreground="#e11d48" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Knight Rider" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Radar Scanner Beam" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Zoom / Ripple -->
-                                            <RadioButton Classes="EffectCard" Tag="hw_zoom" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="MagnifyPlusOutline" Width="18" Height="18" Foreground="#38bdf8"/>
-                                                    <TextBlock Text="Zoom Ripple" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Fire & Ember -->
+                                                    <RadioButton Classes="EffectCard" Tag="sw_fire_ember" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="Fire" Width="18" Height="18" Foreground="#f97316" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Fire &amp; Ember" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Organic Hearth Glow" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Neon -->
-                                            <RadioButton Classes="EffectCard" Tag="hw_neon" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="Flare" Width="18" Height="18" Foreground="#f59e0b"/>
-                                                    <TextBlock Text="Neon Glow" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Police Strobe -->
+                                                    <RadioButton Classes="EffectCard" Tag="sw_police_strobe" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="PoliceBadge" Width="18" Height="18" Foreground="#3b82f6" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Police Strobe" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="High-Intensity Flash" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Meteor Storm -->
-                                            <RadioButton Classes="EffectCard" Tag="hw_meteor" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="WeatherSunny" Width="18" Height="18" Foreground="#fb923c"/>
-                                                    <TextBlock Text="Meteor Storm" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- CPU Temp Heatmap -->
+                                                    <RadioButton Classes="EffectCard" Tag="sw_cpu_heatmap" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="ThermometerAlert" Width="18" Height="18" Foreground="#ef4444" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="CPU Heatmap" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Live Thermal Monitor" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Starry Twinkle -->
-                                            <RadioButton Classes="EffectCard" Tag="hw_twinkling" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="Creation" Width="18" Height="18" Foreground="#ffd700"/>
-                                                    <TextBlock Text="Star Twinkle" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Battery Meter -->
+                                                    <RadioButton Classes="EffectCard" Tag="sw_battery_fuel" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="BatteryCharging" Width="18" Height="18" Foreground="#10b981" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Battery Fuel" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Charge Level Meter" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- CPU Temp Heatmap -->
-                                            <RadioButton Classes="EffectCard" Tag="sw_cpu_heatmap" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="ThermometerAlert" Width="18" Height="18" Foreground="#ef4444"/>
-                                                    <TextBlock Text="CPU Heatmap" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Aurora Drift -->
+                                                    <RadioButton Classes="EffectCard" Tag="sw_aurora" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="WeatherDust" Width="18" Height="18" Foreground="#14b8a6" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Aurora Drift" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Polar Ambient Wave" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
+                                                </WrapPanel>
+                                            </StackPanel>
 
-                                            <!-- Fire & Ember -->
-                                            <RadioButton Classes="EffectCard" Tag="sw_fire_ember" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="Fire" Width="18" Height="18" Foreground="#f97316"/>
-                                                    <TextBlock Text="Fire &amp; Ember" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                            <!-- ============================================== -->
+                                            <!-- Section 2: Hardware Firmware Modes (7)         -->
+                                            <!-- ============================================== -->
+                                            <StackPanel Spacing="5" Margin="0 4 0 0">
+                                                <Grid ColumnDefinitions="*,Auto" Margin="4 0">
+                                                    <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                                        <material:MaterialIcon Kind="Memory" Width="14" Height="14" Foreground="#10b981" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="HARDWARE FIRMWARE" FontSize="11" FontWeight="Bold" Foreground="#34d399" LetterSpacing="1" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <Border Grid.Column="1" Background="#062e22" BorderBrush="#10b981" BorderThickness="0.5" CornerRadius="4" Padding="6 1">
+                                                        <TextBlock Text="0% CPU • 7 Modes" FontSize="9.5" Foreground="#34d399" FontWeight="SemiBold"/>
+                                                    </Border>
+                                                </Grid>
+                                                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <!-- Wave Mode -->
+                                                    <RadioButton Classes="EffectCard" Tag="hw_wave" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="Waves" Width="18" Height="18" Foreground="#00d4ff" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Wave Mode" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Smooth Spectrum Wave" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Police Strobe -->
-                                            <RadioButton Classes="EffectCard" Tag="sw_police_strobe" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="PoliceBadge" Width="18" Height="18" Foreground="#3b82f6"/>
-                                                    <TextBlock Text="Police Strobe" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Neon Glow -->
+                                                    <RadioButton Classes="EffectCard" Tag="hw_neon" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="Flare" Width="18" Height="18" Foreground="#f59e0b" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Neon Glow" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Continuous Hue Cycling" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Matrix Cyber Rain -->
-                                            <RadioButton Classes="EffectCard" Tag="sw_matrix_rain" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="CodeBraces" Width="18" Height="18" Foreground="#22c55e"/>
-                                                    <TextBlock Text="Matrix Rain" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Breathing -->
+                                                    <RadioButton Classes="EffectCard" Tag="hw_breathing" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="HeartPulse" Width="18" Height="18" Foreground="#ff2a55" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Breathing" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Gentle Respiration" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Knight Rider -->
-                                            <RadioButton Classes="EffectCard" Tag="sw_cylon_scanner" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="EyeOutline" Width="18" Height="18" Foreground="#e11d48"/>
-                                                    <TextBlock Text="Knight Rider" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Shifting -->
+                                                    <RadioButton Classes="EffectCard" Tag="hw_shifting" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="ArrowLeftRight" Width="18" Height="18" Foreground="#00ff9d" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Shifting" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Gradient Shift Flow" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Cyberpunk Pulse -->
-                                            <RadioButton Classes="EffectCard" Tag="sw_cyberpunk_pulse" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="LightningBolt" Width="18" Height="18" Foreground="#c084fc"/>
-                                                    <TextBlock Text="Cyberpunk" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Zoom Ripple -->
+                                                    <RadioButton Classes="EffectCard" Tag="hw_zoom" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="MagnifyPlusOutline" Width="18" Height="18" Foreground="#38bdf8" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Zoom Ripple" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Concentric Center Wave" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Rainbow Flow -->
-                                            <RadioButton Classes="EffectCard" Tag="sw_rainbow_flow" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="PaletteOutline" Width="18" Height="18" Foreground="#a855f7"/>
-                                                    <TextBlock Text="Rainbow Flow" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Meteor Storm -->
+                                                    <RadioButton Classes="EffectCard" Tag="hw_meteor" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="WeatherSunny" Width="18" Height="18" Foreground="#fb923c" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Meteor Storm" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Sweeping Comets" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Aurora Drift -->
-                                            <RadioButton Classes="EffectCard" Tag="sw_aurora" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="WeatherDust" Width="18" Height="18" Foreground="#14b8a6"/>
-                                                    <TextBlock Text="Aurora Drift" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Starry Twinkle -->
+                                                    <RadioButton Classes="EffectCard" Tag="hw_twinkling" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="Creation" Width="18" Height="18" Foreground="#ffd700" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Star Twinkle" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Starlight Sparkle Shimmer" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
+                                                </WrapPanel>
+                                            </StackPanel>
 
-                                            <!-- Battery Meter -->
-                                            <RadioButton Classes="EffectCard" Tag="sw_battery_fuel" GroupName="EffectCardGroup" Click="EffectCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="BatteryCharging" Width="18" Height="18" Foreground="#10b981"/>
-                                                    <TextBlock Text="Battery Fuel" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
-                                        </WrapPanel>
+                                            <!-- ============================================== -->
+                                            <!-- Section 3: Static Global Lighting (1)          -->
+                                            <!-- ============================================== -->
+                                            <StackPanel Spacing="5" Margin="0 4 0 4">
+                                                <Grid ColumnDefinitions="*,Auto" Margin="4 0">
+                                                    <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                                        <material:MaterialIcon Kind="Palette" Width="14" Height="14" Foreground="#94a3b8" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="STATIC COLOR" FontSize="11" FontWeight="Bold" Foreground="#cbd5e1" LetterSpacing="1" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <Border Grid.Column="1" Background="#161e2e" BorderBrush="#334155" BorderThickness="0.5" CornerRadius="4" Padding="6 1">
+                                                        <TextBlock Text="Solid Palette" FontSize="9.5" Foreground="#94a3b8" FontWeight="SemiBold"/>
+                                                    </Border>
+                                                </Grid>
+                                                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <!-- Static Mode -->
+                                                    <RadioButton Classes="EffectCard" Tag="static" IsChecked="True" GroupName="EffectCardGroup" Click="EffectCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="CubeOutline" Width="18" Height="18" Foreground="#00f0ff" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Static Color" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Uniform All Zones" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
+                                                </WrapPanel>
+                                            </StackPanel>
+                                        </StackPanel>
                                     </ScrollViewer>
                                 </Grid>
                             </Border>
@@ -873,129 +972,222 @@
                                         </Border>
                                     </Grid>
 
-                                    <!-- 2-Column Theme Cards Grid -->
-                                    <ScrollViewer Grid.Row="1">
-                                        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <!-- Custom Mode -->
-                                            <RadioButton Classes="EffectCard" Tag="custom" IsChecked="True" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="PaletteOutline" Width="18" Height="18" Foreground="#00f0ff"/>
-                                                    <TextBlock Text="Custom 4-Zone" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                    <!-- Categorized 2-Column Theme Sections -->
+                                    <ScrollViewer Grid.Row="1" x:Name="AreaThemesContainer">
+                                        <StackPanel Spacing="10" Margin="0 4 0 0">
+                                            <!-- ============================================== -->
+                                            <!-- Section 1: Custom & Algorithmic Presets (3)   -->
+                                            <!-- ============================================== -->
+                                            <StackPanel Spacing="5">
+                                                <Grid ColumnDefinitions="*,Auto" Margin="4 0">
+                                                    <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                                        <material:MaterialIcon Kind="TuneVertical" Width="14" Height="14" Foreground="#00f0ff" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="CUSTOM &amp; ALGORITHMIC" FontSize="11" FontWeight="Bold" Foreground="#38bdf8" LetterSpacing="1" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <Border Grid.Column="1" Background="#09273a" BorderBrush="#00f0ff" BorderThickness="0.5" CornerRadius="4" Padding="6 1">
+                                                        <TextBlock Text="3 Modes" FontSize="9.5" Foreground="#00f0ff" FontWeight="SemiBold"/>
+                                                    </Border>
+                                                </Grid>
+                                                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <!-- Custom Mode -->
+                                                    <RadioButton Classes="EffectCard" Tag="custom" IsChecked="True" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="PaletteOutline" Width="18" Height="18" Foreground="#00f0ff" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Custom 4-Zone" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Manual Per-Zone Color" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Cyberpunk 2077 -->
-                                            <RadioButton Classes="EffectCard" Tag="cyberpunk" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="Flash" Width="18" Height="18" Foreground="#00f0ff"/>
-                                                    <TextBlock Text="Cyberpunk" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Gradient Flow -->
+                                                    <RadioButton Classes="EffectCard" Tag="gradient_flow" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="GradientHorizontal" Width="18" Height="18" Foreground="#00ff9d" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Gradient Z1→Z4" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Smooth Blend Flow" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Matrix Hacker -->
-                                            <RadioButton Classes="EffectCard" Tag="matrix" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="CodeTags" Width="18" Height="18" Foreground="#00ff9d"/>
-                                                    <TextBlock Text="Matrix" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Mirror Symmetry -->
+                                                    <RadioButton Classes="EffectCard" Tag="mirror_sym" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="FlipHorizontal" Width="18" Height="18" Foreground="#ff2a55" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Mirror Symmetry" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Balanced Dual Wings" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
+                                                </WrapPanel>
+                                            </StackPanel>
 
-                                            <!-- Vaporwave -->
-                                            <RadioButton Classes="EffectCard" Tag="vaporwave" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="WeatherSunset" Width="18" Height="18" Foreground="#ff007f"/>
-                                                    <TextBlock Text="Vaporwave" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                            <!-- ============================================== -->
+                                            <!-- Section 2: Gaming & Cyberpunk Themes (5)      -->
+                                            <!-- ============================================== -->
+                                            <StackPanel Spacing="5" Margin="0 4 0 0">
+                                                <Grid ColumnDefinitions="*,Auto" Margin="4 0">
+                                                    <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                                        <material:MaterialIcon Kind="GamepadVariantOutline" Width="14" Height="14" Foreground="#c084fc" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="GAMING &amp; CYBER" FontSize="11" FontWeight="Bold" Foreground="#c084fc" LetterSpacing="1" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <Border Grid.Column="1" Background="#241438" BorderBrush="#c084fc" BorderThickness="0.5" CornerRadius="4" Padding="6 1">
+                                                        <TextBlock Text="5 Themes" FontSize="9.5" Foreground="#c084fc" FontWeight="SemiBold"/>
+                                                    </Border>
+                                                </Grid>
+                                                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <!-- Cyberpunk 2077 -->
+                                                    <RadioButton Classes="EffectCard" Tag="cyberpunk" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="Flash" Width="18" Height="18" Foreground="#00f0ff" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Cyberpunk 2077" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Neon Cyan &amp; Pink" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Fire & Ice -->
-                                            <RadioButton Classes="EffectCard" Tag="fire_ice" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="Fire" Width="18" Height="18" Foreground="#f59e0b"/>
-                                                    <TextBlock Text="Fire &amp; Ice" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Matrix Hacker -->
+                                                    <RadioButton Classes="EffectCard" Tag="matrix" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="CodeTags" Width="18" Height="18" Foreground="#00ff9d" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Matrix Terminal" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Cyber Code Green" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Sunset Horizon -->
-                                            <RadioButton Classes="EffectCard" Tag="sunset" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="WeatherSunsetDown" Width="18" Height="18" Foreground="#ff5733"/>
-                                                    <TextBlock Text="Sunset" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Predator Teal -->
+                                                    <RadioButton Classes="EffectCard" Tag="predator_teal" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="ShieldOutline" Width="18" Height="18" Foreground="#00f0ff" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Predator Teal" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Signature Acer Cyan" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Predator Teal -->
-                                            <RadioButton Classes="EffectCard" Tag="predator_teal" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="ShieldOutline" Width="18" Height="18" Foreground="#00f0ff"/>
-                                                    <TextBlock Text="Predator Teal" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Toxic Acid -->
+                                                    <RadioButton Classes="EffectCard" Tag="toxic_acid" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="Biohazard" Width="18" Height="18" Foreground="#39ff14" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Toxic Acid" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Hazard Bio Lime" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Toxic Acid -->
-                                            <RadioButton Classes="EffectCard" Tag="toxic_acid" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="Biohazard" Width="18" Height="18" Foreground="#39ff14"/>
-                                                    <TextBlock Text="Toxic Acid" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Blood Moon -->
+                                                    <RadioButton Classes="EffectCard" Tag="blood_moon" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="MoonWaningCrescent" Width="18" Height="18" Foreground="#ff2a55" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Blood Moon" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Crimson &amp; Amber" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
+                                                </WrapPanel>
+                                            </StackPanel>
 
-                                            <!-- Blood Moon -->
-                                            <RadioButton Classes="EffectCard" Tag="blood_moon" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="MoonWaningCrescent" Width="18" Height="18" Foreground="#ff2a55"/>
-                                                    <TextBlock Text="Blood Moon" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                            <!-- ============================================== -->
+                                            <!-- Section 3: Atmospheric & Nature Themes (7)     -->
+                                            <!-- ============================================== -->
+                                            <StackPanel Spacing="5" Margin="0 4 0 4">
+                                                <Grid ColumnDefinitions="*,Auto" Margin="4 0">
+                                                    <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                                        <material:MaterialIcon Kind="WeatherSunny" Width="14" Height="14" Foreground="#f59e0b" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="ATMOSPHERIC &amp; NATURE" FontSize="11" FontWeight="Bold" Foreground="#fbbf24" LetterSpacing="1" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <Border Grid.Column="1" Background="#2e1f06" BorderBrush="#f59e0b" BorderThickness="0.5" CornerRadius="4" Padding="6 1">
+                                                        <TextBlock Text="7 Themes" FontSize="9.5" Foreground="#fbbf24" FontWeight="SemiBold"/>
+                                                    </Border>
+                                                </Grid>
+                                                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <!-- Vaporwave -->
+                                                    <RadioButton Classes="EffectCard" Tag="vaporwave" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="WeatherSunset" Width="18" Height="18" Foreground="#ff007f" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Vaporwave" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Retro Synthwave Glow" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Arctic Frost -->
-                                            <RadioButton Classes="EffectCard" Tag="arctic_frost" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="Snowflake" Width="18" Height="18" Foreground="#ffffff"/>
-                                                    <TextBlock Text="Arctic Frost" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Fire & Ice -->
+                                                    <RadioButton Classes="EffectCard" Tag="fire_ice" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="Fire" Width="18" Height="18" Foreground="#f59e0b" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Fire &amp; Ice" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Flame Meets Glacier" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Rainbow -->
-                                            <RadioButton Classes="EffectCard" Tag="rainbow" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="PaletteAdvanced" Width="18" Height="18" Foreground="#38bdf8"/>
-                                                    <TextBlock Text="Rainbow" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Sunset Horizon -->
+                                                    <RadioButton Classes="EffectCard" Tag="sunset" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="WeatherSunsetDown" Width="18" Height="18" Foreground="#ff5733" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Sunset Horizon" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Golden Twilight Glow" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Deep Purple -->
-                                            <RadioButton Classes="EffectCard" Tag="deep_purple" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="AutoFix" Width="18" Height="18" Foreground="#c084fc"/>
-                                                    <TextBlock Text="Deep Purple" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Arctic Frost -->
+                                                    <RadioButton Classes="EffectCard" Tag="arctic_frost" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="Snowflake" Width="18" Height="18" Foreground="#ffffff" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Arctic Frost" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Glacier Pure White" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Golden Dragon -->
-                                            <RadioButton Classes="EffectCard" Tag="golden_dragon" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="CrownOutline" Width="18" Height="18" Foreground="#f59e0b"/>
-                                                    <TextBlock Text="Gold Dragon" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Rainbow -->
+                                                    <RadioButton Classes="EffectCard" Tag="rainbow" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="PaletteAdvanced" Width="18" Height="18" Foreground="#38bdf8" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Rainbow" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Full Spectrum Flow" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Gradient Flow -->
-                                            <RadioButton Classes="EffectCard" Tag="gradient_flow" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="GradientHorizontal" Width="18" Height="18" Foreground="#00ff9d"/>
-                                                    <TextBlock Text="Gradient Z1→Z4" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
+                                                    <!-- Deep Purple -->
+                                                    <RadioButton Classes="EffectCard" Tag="deep_purple" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="AutoFix" Width="18" Height="18" Foreground="#c084fc" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Deep Purple" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Royal Amethyst" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
 
-                                            <!-- Mirror Symmetry -->
-                                            <RadioButton Classes="EffectCard" Tag="mirror_sym" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
-                                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                    <material:MaterialIcon Kind="FlipHorizontal" Width="18" Height="18" Foreground="#ff2a55"/>
-                                                    <TextBlock Text="Mirror Symmetry" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </RadioButton>
-                                        </WrapPanel>
+                                                    <!-- Golden Dragon -->
+                                                    <RadioButton Classes="EffectCard" Tag="golden_dragon" GroupName="AreaThemeGroup" Click="AreaThemeCard_Click">
+                                                        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                                            <material:MaterialIcon Kind="CrownOutline" Width="18" Height="18" Foreground="#f59e0b" Margin="0 0 8 0" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                                                <TextBlock Text="Gold Dragon" FontWeight="Bold" FontSize="11.5" Foreground="#eff9ff" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="Imperial Sunburst" FontSize="9" Foreground="#64748b" TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </RadioButton>
+                                                </WrapPanel>
+                                            </StackPanel>
+                                        </StackPanel>
                                     </ScrollViewer>
                                 </Grid>
                             </Border>

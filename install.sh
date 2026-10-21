@@ -468,4 +468,3 @@ printf "  • Predator Key Toggle: ${CYAN}%s${NC}\n" "${BIN_DIR}/predatorsense-t
 printf "  • Systemd Service:     ${CYAN}systemctl status predatorsense-daemon.service${NC}\n"
 printf "  • Desktop Launcher:    Available in your application menu as ${BOLD}Predator Sense${NC}\n"
 echo "=============================================================================="
-EOF

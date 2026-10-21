@@ -246,6 +246,15 @@ log_info "Configuring PredatorSense hardware daemon..."
 DAEMON_SRC="${ROOT_DIR}/daemon"
 
 if [[ "$BUILD_ONLY" == "0" ]]; then
+    # Stop and disable legacy damx-daemon service if present
+    if systemctl is-active --quiet damx-daemon.service 2>/dev/null || systemctl is-enabled --quiet damx-daemon.service 2>/dev/null; then
+        log_info "Stopping and disabling legacy damx-daemon service..."
+        systemctl stop damx-daemon.service 2>/dev/null || true
+        systemctl disable damx-daemon.service 2>/dev/null || true
+        rm -f /etc/systemd/system/damx-daemon.service 2>/dev/null || true
+        rm -f /var/run/DAMX.sock 2>/dev/null || true
+    fi
+
     TARGET_DAEMON_DIR="${INSTALL_PREFIX}/daemon"
     mkdir -p "${TARGET_DAEMON_DIR}"
     cp -r "${DAEMON_SRC}"/* "${TARGET_DAEMON_DIR}/"
@@ -407,10 +416,11 @@ if [[ "$BUILD_ONLY" == "0" ]]; then
         sudo -u "$TARGET_USER" dbus-launch gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/predatorsense/ binding "XF86Launch7" 2>/dev/null || true
     fi
 
-    # User local toggle script symlink for convenience
+    # User local toggle and binary symlink for convenience
     if [[ -d "${USER_HOME}/.local/bin" ]]; then
+        ln -sf "${BIN_DIR}/predatorsense" "${USER_HOME}/.local/bin/predatorsense"
         ln -sf "${BIN_DIR}/predatorsense-toggle" "${USER_HOME}/.local/bin/predatorsense-toggle"
-        chown -h "${TARGET_USER}:${TARGET_USER}" "${USER_HOME}/.local/bin/predatorsense-toggle" || true
+        chown -h "${TARGET_USER}:${TARGET_USER}" "${USER_HOME}/.local/bin/predatorsense" "${USER_HOME}/.local/bin/predatorsense-toggle" || true
     fi
     log_success "Predator key mapped to /usr/local/bin/predatorsense-toggle."
 fi

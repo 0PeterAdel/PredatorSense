@@ -20,6 +20,8 @@ fi
 printf "${CYAN}[i] Stopping and disabling PredatorSense services...${NC}\n"
 systemctl stop predatorsense-daemon.service 2>/dev/null || true
 systemctl disable predatorsense-daemon.service 2>/dev/null || true
+systemctl stop damx-daemon.service 2>/dev/null || true
+systemctl disable damx-daemon.service 2>/dev/null || true
 systemctl stop linuwu_sense.service 2>/dev/null || true
 systemctl disable linuwu_sense.service 2>/dev/null || true
 
